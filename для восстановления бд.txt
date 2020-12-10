@@ -1,0 +1,7 @@
+Чтобы узнать логин:
+SELECT * FROM sys.dm_exec_sessions WHERE session_id = @@SPID;
+
+Чтобы бд из .bak работала
+ALTER AUTHORIZATION 
+ON DATABASE::[Animaux]
+TO [A Suitable Login];
