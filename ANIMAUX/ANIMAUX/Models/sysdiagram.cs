@@ -12,13 +12,12 @@ namespace ANIMAUX.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class publication
+    public partial class sysdiagram
     {
-        public int id { get; set; }
-        public System.DateTime added_date { get; set; }
-        public string photo { get; set; }
-        public string city { get; set; }
-        public int animal_id { get; set; }
-        public string type { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
