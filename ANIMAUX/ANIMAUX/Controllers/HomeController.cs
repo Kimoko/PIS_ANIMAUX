@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ANIMAUX.Models;
 
 namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
     {
+        AnimauxEntities entities = new AnimauxEntities();
+
         public ActionResult Profile()
         {
             return View();
