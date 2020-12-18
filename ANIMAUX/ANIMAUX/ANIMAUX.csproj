@@ -411,7 +411,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Registry.cshtml" />
-    <Content Include="Views\Home\Publication.cshtml" />
+    <Content Include="Views\Home\Publications.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
     <Content Include="Views\Profile\Pets.cshtml" />
     <Content Include="Views\Profile\Notification.cshtml" />

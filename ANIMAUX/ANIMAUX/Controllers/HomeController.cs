@@ -18,8 +18,6 @@ namespace ANIMAUX.Controllers
 
         public ActionResult Registry()
         {
-//            ViewBag.Message = "Реестр";
-
             return View(entities.animals.ToList());
         }
 
