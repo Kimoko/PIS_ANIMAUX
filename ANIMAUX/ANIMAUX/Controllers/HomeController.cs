@@ -8,21 +8,21 @@ namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Client()
         {
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Registry()
         {
-            ViewBag.Message = "Your application description page.";
+//            ViewBag.Message = "Реестр";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Publication()
         {
-            ViewBag.Message = "Your contact page.";
+//            ViewBag.Message = "Объявления";
 
             return View();
         }
