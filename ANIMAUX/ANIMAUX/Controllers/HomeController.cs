@@ -8,7 +8,7 @@ namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Client()
+        public ActionResult Profile()
         {
             return View();
         }

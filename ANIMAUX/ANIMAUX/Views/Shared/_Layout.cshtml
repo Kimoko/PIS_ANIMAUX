@@ -4,8 +4,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - приложение ASP.NET</title>
+    <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
+
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
@@ -14,25 +15,27 @@
 
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-
-                    <li>@Html.ActionLink("Аккаунт", "Client", "Home")</li>
+                    <li>@Html.ActionLink("Личный кабинет", "Profile", "Home")</li>
                     @switch (0)
                     {
                         case 0:
-                            <li>@Html.ActionLink("Реестр", "Registry", "Home")</li>
-                            <li>@Html.ActionLink("Объявления", "Publication", "Home")</li>
+                            <li class="nav-item"> @Html.ActionLink("Реестр", "Registry", "Home")</li>
+                            <li class="nav-item">@Html.ActionLink("Объявления", "Publication", "Home")</li>
                             break;
                         case 1:
-                            <li>@Html.ActionLink("Реестр", "Registry", "Home")</li>
+                            <li class="nav-item">@Html.ActionLink("Реестр", "Registry", "Home")</li>
                             break;
                         case 2:
-                            <li>@Html.ActionLink("Объявления", "Publication", "Home")</li>
+                            <li class="nav-item">@Html.ActionLink("Объявления", "Publication", "Home")</li>
                             break;
                     }
+
                 </ul>
+
             </div>
         </div>
     </div>
+
     <div class="container body-content">
         @RenderBody()
         <hr />
