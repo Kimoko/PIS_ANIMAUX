@@ -4,17 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AnimauxModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Animaux.dbo.animals' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      <Schema Namespace="Хранилище AnimauxModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="animals">
           <Key>
             <PropertyRef Name="passport_number" />
-            <PropertyRef Name="category" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="birth_date" />
-            <PropertyRef Name="breed" />
-            <PropertyRef Name="sex" />
           </Key>
           <Property Name="passport_number" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="category" Type="varchar" MaxLength="50" Nullable="false" />
@@ -23,14 +16,14 @@ warning 6002: The table/view 'Animaux.dbo.animals' does not have a primary key d
           <Property Name="breed" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="sex" Type="varchar" MaxLength="10" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Animaux.dbo.cards' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="cards">
           <Key>
-            <PropertyRef Name="animal" />
-            <PropertyRef Name="date_added" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="animal" Type="int" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="organisation_id" Type="int" Nullable="false" />
+          <Property Name="district_id" Type="int" Nullable="false" />
+          <Property Name="animal_id" Type="int" Nullable="false" />
           <Property Name="date_added" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="districts">
@@ -47,23 +40,23 @@ warning 6002: The table/view 'Animaux.dbo.cards' does not have a primary key def
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="photos_by_pubs">
+          <Key>
+            <PropertyRef Name="photo_url" />
+          </Key>
+          <Property Name="photo_url" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="pub_id" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="publications">
           <Key>
             <PropertyRef Name="id" />
-            <PropertyRef Name="added_date" />
-            <PropertyRef Name="photo" />
-            <PropertyRef Name="city" />
-            <PropertyRef Name="animal_id" />
-            <PropertyRef Name="type" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="added_date" Type="date" Nullable="false" />
           <Property Name="photo" Type="text" Nullable="false" />
           <Property Name="city" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="animal_id" Type="int" Nullable="false" />
-          <Property Name="type" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="type" Type="varchar" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="roles">
           <Key>
@@ -90,12 +83,72 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="surname" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="user_role" Type="int" />
-          <Property Name="user_organistaion" Type="int" />
-          <Property Name="user_district" Type="int" />
+          <Property Name="user_role" Type="int" Nullable="false" />
+          <Property Name="user_organistaion" Type="int" Nullable="false" />
+          <Property Name="user_district" Type="int" Nullable="false" />
         </EntityType>
+        <Association Name="FK_cards_animals">
+          <End Role="animals" Type="Self.animals" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="animals">
+              <PropertyRef Name="passport_number" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="animal_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cards_districts">
+          <End Role="districts" Type="Self.districts" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="districts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="district_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cards_organisations">
+          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_photos_by_pubs_publications">
+          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="photos_by_pubs" Type="Self.photos_by_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="photos_by_pubs">
+              <PropertyRef Name="pub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_publications_animals">
+          <End Role="animals" Type="Self.animals" Multiplicity="1" />
+          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="animals">
+              <PropertyRef Name="passport_number" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="animal_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_users_districts">
-          <End Role="districts" Type="Self.districts" Multiplicity="0..1" />
+          <End Role="districts" Type="Self.districts" Multiplicity="1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="districts">
@@ -107,7 +160,7 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_organisations">
-          <End Role="organisations" Type="Self.organisations" Multiplicity="0..1" />
+          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organisations">
@@ -119,7 +172,7 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_roles">
-          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="roles">
@@ -161,38 +214,36 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="AnimauxModelStoreContainer">
+        <EntityContainer Name="Хранилище AnimauxModelContainer">
+          <EntitySet Name="animals" EntityType="Self.animals" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cards" EntityType="Self.cards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="districts" EntityType="Self.districts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="organisations" EntityType="Self.organisations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="photos_by_pubs" EntityType="Self.photos_by_pubs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="publications" EntityType="Self.publications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="roles" EntityType="Self.roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="animals" EntityType="Self.animals" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [animals].[passport_number] AS [passport_number], 
-    [animals].[category] AS [category], 
-    [animals].[name] AS [name], 
-    [animals].[birth_date] AS [birth_date], 
-    [animals].[breed] AS [breed], 
-    [animals].[sex] AS [sex]
-    FROM [dbo].[animals] AS [animals]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="cards" EntityType="Self.cards" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [cards].[animal] AS [animal], 
-    [cards].[date_added] AS [date_added]
-    FROM [dbo].[cards] AS [cards]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="publications" EntityType="Self.publications" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [publications].[id] AS [id], 
-    [publications].[added_date] AS [added_date], 
-    [publications].[photo] AS [photo], 
-    [publications].[city] AS [city], 
-    [publications].[animal_id] AS [animal_id], 
-    [publications].[type] AS [type]
-    FROM [dbo].[publications] AS [publications]</DefiningQuery>
-          </EntitySet>
+          <AssociationSet Name="FK_cards_animals" Association="Self.FK_cards_animals">
+            <End Role="animals" EntitySet="animals" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cards_districts" Association="Self.FK_cards_districts">
+            <End Role="districts" EntitySet="districts" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cards_organisations" Association="Self.FK_cards_organisations">
+            <End Role="organisations" EntitySet="organisations" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_photos_by_pubs_publications" Association="Self.FK_photos_by_pubs_publications">
+            <End Role="publications" EntitySet="publications" />
+            <End Role="photos_by_pubs" EntitySet="photos_by_pubs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_publications_animals" Association="Self.FK_publications_animals">
+            <End Role="animals" EntitySet="animals" />
+            <End Role="publications" EntitySet="publications" />
+          </AssociationSet>
           <AssociationSet Name="FK_users_districts" Association="Self.FK_users_districts">
             <End Role="districts" EntitySet="districts" />
             <End Role="users" EntitySet="users" />
@@ -211,23 +262,72 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AnimauxModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="district">
+        <EntityType Name="animals">
+          <Key>
+            <PropertyRef Name="passport_number" />
+          </Key>
+          <Property Name="passport_number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="birth_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="breed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="sex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cards" Relationship="Self.FK_cards_animals" FromRole="animals" ToRole="cards" />
+          <NavigationProperty Name="publications" Relationship="Self.FK_publications_animals" FromRole="animals" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="cards">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="organisation_id" Type="Int32" Nullable="false" />
+          <Property Name="district_id" Type="Int32" Nullable="false" />
+          <Property Name="animal_id" Type="Int32" Nullable="false" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="animals" Relationship="Self.FK_cards_animals" FromRole="cards" ToRole="animals" />
+          <NavigationProperty Name="districts" Relationship="Self.FK_cards_districts" FromRole="cards" ToRole="districts" />
+          <NavigationProperty Name="organisations" Relationship="Self.FK_cards_organisations" FromRole="cards" ToRole="organisations" />
+        </EntityType>
+        <EntityType Name="districts">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cards" Relationship="Self.FK_cards_districts" FromRole="districts" ToRole="cards" />
           <NavigationProperty Name="users" Relationship="Self.FK_users_districts" FromRole="districts" ToRole="users" />
         </EntityType>
-        <EntityType Name="organisation">
+        <EntityType Name="organisations">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="cards" Relationship="Self.FK_cards_organisations" FromRole="organisations" ToRole="cards" />
           <NavigationProperty Name="users" Relationship="Self.FK_users_organisations" FromRole="organisations" ToRole="users" />
         </EntityType>
-        <EntityType Name="role">
+        <EntityType Name="photos_by_pubs">
+          <Key>
+            <PropertyRef Name="photo_url" />
+          </Key>
+          <Property Name="photo_url" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="pub_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="publications" Relationship="Self.FK_photos_by_pubs_publications" FromRole="photos_by_pubs" ToRole="publications" />
+        </EntityType>
+        <EntityType Name="publications">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="added_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="city" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="animal_id" Type="Int32" Nullable="false" />
+          <Property Name="type" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="animals" Relationship="Self.FK_publications_animals" FromRole="publications" ToRole="animals" />
+          <NavigationProperty Name="photos_by_pubs" Relationship="Self.FK_photos_by_pubs_publications" FromRole="publications" ToRole="photos_by_pubs" />
+        </EntityType>
+        <EntityType Name="roles">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -236,7 +336,7 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           <Property Name="access_level" Type="Int32" Nullable="false" />
           <NavigationProperty Name="users" Relationship="Self.FK_users_roles" FromRole="roles" ToRole="users" />
         </EntityType>
-        <EntityType Name="sysdiagram">
+        <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
@@ -246,63 +346,71 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="user">
+        <EntityType Name="users">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="user_role" Type="Int32" />
-          <Property Name="user_organistaion" Type="Int32" />
-          <Property Name="user_district" Type="Int32" />
-          <NavigationProperty Name="district" Relationship="Self.FK_users_districts" FromRole="users" ToRole="districts" />
-          <NavigationProperty Name="organisation" Relationship="Self.FK_users_organisations" FromRole="users" ToRole="organisations" />
-          <NavigationProperty Name="role" Relationship="Self.FK_users_roles" FromRole="users" ToRole="roles" />
+          <Property Name="user_role" Type="Int32" Nullable="false" />
+          <Property Name="user_organistaion" Type="Int32" Nullable="false" />
+          <Property Name="user_district" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="districts" Relationship="Self.FK_users_districts" FromRole="users" ToRole="districts" />
+          <NavigationProperty Name="organisations" Relationship="Self.FK_users_organisations" FromRole="users" ToRole="organisations" />
+          <NavigationProperty Name="roles" Relationship="Self.FK_users_roles" FromRole="users" ToRole="roles" />
         </EntityType>
-        <EntityType Name="animal">
-          <Key>
-            <PropertyRef Name="passport_number" />
-            <PropertyRef Name="category" />
-            <PropertyRef Name="name" />
-            <PropertyRef Name="birth_date" />
-            <PropertyRef Name="breed" />
-            <PropertyRef Name="sex" />
-          </Key>
-          <Property Name="passport_number" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="birth_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="breed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="sex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
-        <EntityType Name="card">
-          <Key>
-            <PropertyRef Name="animal" />
-            <PropertyRef Name="date_added" />
-          </Key>
-          <Property Name="animal" Type="Int32" Nullable="false" />
-          <Property Name="date_added" Type="DateTime" Nullable="false" Precision="0" />
-        </EntityType>
-        <EntityType Name="publication">
-          <Key>
-            <PropertyRef Name="id" />
-            <PropertyRef Name="added_date" />
-            <PropertyRef Name="photo" />
-            <PropertyRef Name="city" />
-            <PropertyRef Name="animal_id" />
-            <PropertyRef Name="type" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="added_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="city" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="animal_id" Type="Int32" Nullable="false" />
-          <Property Name="type" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-        </EntityType>
+        <Association Name="FK_cards_animals">
+          <End Role="animals" Type="Self.animals" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="animals">
+              <PropertyRef Name="passport_number" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="animal_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_publications_animals">
+          <End Role="animals" Type="Self.animals" Multiplicity="1" />
+          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="animals">
+              <PropertyRef Name="passport_number" />
+            </Principal>
+            <Dependent Role="publications">
+              <PropertyRef Name="animal_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cards_districts">
+          <End Role="districts" Type="Self.districts" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="districts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="district_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cards_organisations">
+          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
+          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="organisations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cards">
+              <PropertyRef Name="organisation_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_users_districts">
-          <End Role="districts" Type="Self.district" Multiplicity="0..1" />
-          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <End Role="districts" Type="Self.districts" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="districts">
               <PropertyRef Name="id" />
@@ -313,8 +421,8 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_organisations">
-          <End Role="organisations" Type="Self.organisation" Multiplicity="0..1" />
-          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organisations">
               <PropertyRef Name="id" />
@@ -324,9 +432,21 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_photos_by_pubs_publications">
+          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="photos_by_pubs" Type="Self.photos_by_pubs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="publications">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="photos_by_pubs">
+              <PropertyRef Name="pub_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_users_roles">
-          <End Role="roles" Type="Self.role" Multiplicity="0..1" />
-          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="roles">
               <PropertyRef Name="id" />
@@ -337,14 +457,31 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="AnimauxEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="districts" EntityType="Self.district" />
-          <EntitySet Name="organisations" EntityType="Self.organisation" />
-          <EntitySet Name="roles" EntityType="Self.role" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
-          <EntitySet Name="users" EntityType="Self.user" />
-          <EntitySet Name="animals" EntityType="Self.animal" />
-          <EntitySet Name="cards" EntityType="Self.card" />
-          <EntitySet Name="publications" EntityType="Self.publication" />
+          <EntitySet Name="animals" EntityType="Self.animals" />
+          <EntitySet Name="cards" EntityType="Self.cards" />
+          <EntitySet Name="districts" EntityType="Self.districts" />
+          <EntitySet Name="organisations" EntityType="Self.organisations" />
+          <EntitySet Name="photos_by_pubs" EntityType="Self.photos_by_pubs" />
+          <EntitySet Name="publications" EntityType="Self.publications" />
+          <EntitySet Name="roles" EntityType="Self.roles" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <AssociationSet Name="FK_cards_animals" Association="Self.FK_cards_animals">
+            <End Role="animals" EntitySet="animals" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_publications_animals" Association="Self.FK_publications_animals">
+            <End Role="animals" EntitySet="animals" />
+            <End Role="publications" EntitySet="publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cards_districts" Association="Self.FK_cards_districts">
+            <End Role="districts" EntitySet="districts" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cards_organisations" Association="Self.FK_cards_organisations">
+            <End Role="organisations" EntitySet="organisations" />
+            <End Role="cards" EntitySet="cards" />
+          </AssociationSet>
           <AssociationSet Name="FK_users_districts" Association="Self.FK_users_districts">
             <End Role="districts" EntitySet="districts" />
             <End Role="users" EntitySet="users" />
@@ -352,6 +489,10 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
           <AssociationSet Name="FK_users_organisations" Association="Self.FK_users_organisations">
             <End Role="organisations" EntitySet="organisations" />
             <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_photos_by_pubs_publications" Association="Self.FK_photos_by_pubs_publications">
+            <End Role="publications" EntitySet="publications" />
+            <End Role="photos_by_pubs" EntitySet="photos_by_pubs" />
           </AssociationSet>
           <AssociationSet Name="FK_users_roles" Association="Self.FK_users_roles">
             <End Role="roles" EntitySet="roles" />
@@ -393,57 +534,9 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="AnimauxModelStoreContainer" CdmEntityContainer="AnimauxEntities">
-          <EntitySetMapping Name="districts">
-            <EntityTypeMapping TypeName="AnimauxModel.district">
-              <MappingFragment StoreEntitySet="districts">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="organisations">
-            <EntityTypeMapping TypeName="AnimauxModel.organisation">
-              <MappingFragment StoreEntitySet="organisations">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="roles">
-            <EntityTypeMapping TypeName="AnimauxModel.role">
-              <MappingFragment StoreEntitySet="roles">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="access_level" ColumnName="access_level" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="AnimauxModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="AnimauxModel.user">
-              <MappingFragment StoreEntitySet="users">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="surname" ColumnName="surname" />
-                <ScalarProperty Name="user_role" ColumnName="user_role" />
-                <ScalarProperty Name="user_organistaion" ColumnName="user_organistaion" />
-                <ScalarProperty Name="user_district" ColumnName="user_district" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+        <EntityContainerMapping StorageEntityContainer="Хранилище AnimauxModelContainer" CdmEntityContainer="AnimauxEntities">
           <EntitySetMapping Name="animals">
-            <EntityTypeMapping TypeName="AnimauxModel.animal">
+            <EntityTypeMapping TypeName="AnimauxModel.animals">
               <MappingFragment StoreEntitySet="animals">
                 <ScalarProperty Name="passport_number" ColumnName="passport_number" />
                 <ScalarProperty Name="category" ColumnName="category" />
@@ -455,15 +548,42 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="cards">
-            <EntityTypeMapping TypeName="AnimauxModel.card">
+            <EntityTypeMapping TypeName="AnimauxModel.cards">
               <MappingFragment StoreEntitySet="cards">
-                <ScalarProperty Name="animal" ColumnName="animal" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="organisation_id" ColumnName="organisation_id" />
+                <ScalarProperty Name="district_id" ColumnName="district_id" />
+                <ScalarProperty Name="animal_id" ColumnName="animal_id" />
                 <ScalarProperty Name="date_added" ColumnName="date_added" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="districts">
+            <EntityTypeMapping TypeName="AnimauxModel.districts">
+              <MappingFragment StoreEntitySet="districts">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="organisations">
+            <EntityTypeMapping TypeName="AnimauxModel.organisations">
+              <MappingFragment StoreEntitySet="organisations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="photos_by_pubs">
+            <EntityTypeMapping TypeName="AnimauxModel.photos_by_pubs">
+              <MappingFragment StoreEntitySet="photos_by_pubs">
+                <ScalarProperty Name="photo_url" ColumnName="photo_url" />
+                <ScalarProperty Name="pub_id" ColumnName="pub_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="publications">
-            <EntityTypeMapping TypeName="AnimauxModel.publication">
+            <EntityTypeMapping TypeName="AnimauxModel.publications">
               <MappingFragment StoreEntitySet="publications">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="added_date" ColumnName="added_date" />
@@ -474,13 +594,45 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="AnimauxModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="AnimauxModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="AnimauxModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="AnimauxModel.Store.sp_helpdiagramdefinition" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="AnimauxModel.Store.sp_helpdiagrams" />
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="AnimauxModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="AnimauxModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="roles">
+            <EntityTypeMapping TypeName="AnimauxModel.roles">
+              <MappingFragment StoreEntitySet="roles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="access_level" ColumnName="access_level" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="AnimauxModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="AnimauxModel.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="user_role" ColumnName="user_role" />
+                <ScalarProperty Name="user_organistaion" ColumnName="user_organistaion" />
+                <ScalarProperty Name="user_district" ColumnName="user_district" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище AnimauxModel.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище AnimauxModel.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище AnimauxModel.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="Хранилище AnimauxModel.sp_helpdiagramdefinition" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="Хранилище AnimauxModel.sp_helpdiagrams" />
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище AnimauxModel.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище AnimauxModel.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -495,10 +647,10 @@ warning 6002: The table/view 'Animaux.dbo.publications' does not have a primary 
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
