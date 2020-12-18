@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ANIMAUX.Models.animals>
+﻿@model IEnumerable<ANIMAUX.Models.RegistryItems>
+
+
 
 @{
     ViewBag.Title = "реестр";
@@ -14,30 +16,31 @@
         <th>Возраст</th>
         <th>Населенный пункт</th>
     </tr>
+    @ViewBag.Registry
 
-    @foreach (var item in Model)
+    @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>)
     {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.passport_number)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.category)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.name)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.birth_date)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.breed)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.sex)
-    </td>
+        <tr>
 
-</tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.cards.id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.animals.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cards.date_added)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.animals.sex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem =>item.animals.birth_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.districts.name)
+            </td>
+        </tr>
     }
 
 </table>

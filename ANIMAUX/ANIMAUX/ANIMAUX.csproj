@@ -150,7 +150,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.cs" />
     <Compile Include="Models\Model1.Designer.cs">
       <DependentUpon>Model1.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -170,6 +169,7 @@
     <Compile Include="Models\publications.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegistryItems.cs" />
     <Compile Include="Models\roles.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
