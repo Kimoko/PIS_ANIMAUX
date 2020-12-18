@@ -27,7 +27,7 @@ namespace ANIMAUX.Controllers
         {
 //            ViewBag.Message = "Объявления";
 
-            return View();
+            return View(entities.publications.ToList());
         }
     }
 }
