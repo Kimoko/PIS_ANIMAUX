@@ -20,7 +20,7 @@ namespace ANIMAUX.Controllers
         {
 //            ViewBag.Message = "Реестр";
 
-            return View();
+            return View(entities.animals.ToList());
         }
 
         public ActionResult Publication()

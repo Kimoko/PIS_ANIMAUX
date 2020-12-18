@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<ANIMAUX.Models.animal>
+
+@{
     ViewBag.Title = "реестр";
 }
 <h2>@ViewBag.Title.</h2>
@@ -13,10 +15,29 @@
         <th>Населенный пункт</th>
     </tr>
 
-            <tr>
-                <td>
-                </td>
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.passport_number)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.category)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.birth_date)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.breed)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.sex)
+    </td>
 
-            </tr>
-   
-    </table>
+</tr>
+    }
+
+</table>
