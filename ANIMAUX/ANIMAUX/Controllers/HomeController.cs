@@ -23,7 +23,7 @@ namespace ANIMAUX.Controllers
             return View(entities.animals.ToList());
         }
 
-        public ActionResult Publication()
+        public ActionResult Publications()
         {
 //            ViewBag.Message = "Объявления";
 
