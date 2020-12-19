@@ -34,6 +34,16 @@
                         <li class="nav-item">@Html.ActionLink("Объявления", "Publications", "Home", new { @class = "nav-link" })</li>
                         break;
                 }
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Личный кабинет
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        @Html.ActionLink("Мои домашние животные", "Pets", "Profile", new { @class = "dropdown-item" })
+                        @Html.ActionLink("Уведомления", "Notification", "Profile", new { @class = "dropdown-item" })
+                        @Html.ActionLink("Мои объявления", "MyPublications", "Profile", new { @class = "dropdown-item" })
+                    </div>
+                </li>
             </ul>
             @using (Html.BeginForm("addPet", "", FormMethod.Post))
             {
