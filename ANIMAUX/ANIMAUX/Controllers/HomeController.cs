@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ANIMAUX.Models;
+using ANIMAUX.Helpers;
 
 namespace ANIMAUX.Controllers
 {
@@ -18,6 +19,15 @@ namespace ANIMAUX.Controllers
 
         public ActionResult Registry()
         {
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = "По умолчанию", Value = "0", Selected = true });
+            items.Add(new SelectListItem { Text = "По возрастанию", Value = "1" });
+            items.Add(new SelectListItem { Text = "По убыванию", Value = "2"});
+
+            ViewBag.SortType = items;
+
+
+            /////////////////////////////////////////////////
             List<cards> cardsList = entities.cards.ToList();
             List<animals> animalsList = entities.animals.ToList();
             List<districts> districtsList = entities.districts.ToList();
