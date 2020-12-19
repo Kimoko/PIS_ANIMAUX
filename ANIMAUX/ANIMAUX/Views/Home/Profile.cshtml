@@ -2,26 +2,4 @@
     ViewBag.Title = "Пользователь";
 }
 
-
-
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">@Html.ActionLink("Мои домашние животные", "Pets", "Profile", new { @class = "nav-link" })</li>
-            <li class="nav-item">@Html.ActionLink("Уведомления", "Notification", "Profile", new { @class = "nav-link" })</li>
-            <li class="nav-item">@Html.ActionLink("Мои объявления", "MyPublications", "Profile", new { @class = "nav-link" })</li>
-        </ul>
-        @using (Html.BeginForm("addPet", "", FormMethod.Post))
-        {
-            <form class="form-inline my-2 my-lg-0">
-                <button class="btn btn-outline-info my-2 my-sm-0" value="addPet">Добавить животное</button>
-            </form>
-
-        }
-    </div>
-
-</nav>
 <h2>Здесь необходимо сделать аккаунт пользователя</h2>

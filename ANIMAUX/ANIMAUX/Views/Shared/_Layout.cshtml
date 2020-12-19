@@ -28,22 +28,21 @@
                         <li class="nav-item">@Html.ActionLink("Реестр", "Registry", "Home", new { @class = "nav-link" })</li>
                         break;
                     case 2:
-                        <li class="nav-item">
-                            @Html.ActionLink("Личный кабинет", "Profile", "Home", new { @class = "nav-link" })
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Личный кабинет
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                @Html.ActionLink("Профиль", "Profile", "Home", new { @class = "dropdown-item" })
+                                @Html.ActionLink("Мои домашние животные", "Pets", "Profile", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Уведомления", "Notification", "Profile", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Мои объявления", "MyPublications", "Profile", null, new { @class = "dropdown-item" })
+                            </div>
                         </li>
                         <li class="nav-item">@Html.ActionLink("Объявления", "Publications", "Home", new { @class = "nav-link" })</li>
                         break;
                 }
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Личный кабинет
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        @Html.ActionLink("Мои домашние животные", "Pets", "Profile", new { @class = "dropdown-item" })
-                        @Html.ActionLink("Уведомления", "Notification", "Profile", new { @class = "dropdown-item" })
-                        @Html.ActionLink("Мои объявления", "MyPublications", "Profile", new { @class = "dropdown-item" })
-                    </div>
-                </li>
+
             </ul>
             @using (Html.BeginForm("addPet", "", FormMethod.Post))
             {

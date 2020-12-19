@@ -420,7 +420,7 @@
     <Content Include="Views\Home\Profile.cshtml" />
     <Content Include="Views\Profile\Pets.cshtml" />
     <Content Include="Views\Profile\Notification.cshtml" />
-    <Content Include="Views\Profile\MyPublication.cshtml" />
+    <Content Include="Views\Profile\MyPublications.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper.js.flow" />
