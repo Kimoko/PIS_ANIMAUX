@@ -9,6 +9,24 @@ namespace ANIMAUX.Helpers
 {
     public class BootstrapHtml
     {
+        public static MvcHtmlString MyDropdown(string id, List<SelectListItem> selectListItems, string label)
+        {
+            var select = new TagBuilder("select");
+
+            select.AddCssClass("custom-select");
+            select.GenerateId(id);
+            select.Attributes.Add("name", id);
+            select.InnerHtml += "<option selected value='-1'>"+label+"</option>";
+            foreach (var item in selectListItems)
+            {
+                var dropdown_menu = new TagBuilder("option");
+                dropdown_menu.Attributes.Add("value", item.Value);
+                dropdown_menu.SetInnerText(item.Text);
+                select.InnerHtml += dropdown_menu;
+            }           
+            return new MvcHtmlString(select.ToString());
+        }
+
         public static MvcHtmlString Dropdown(string id, List<SelectListItem> selectListItems, string label)
         {
             var button = new TagBuilder("button")

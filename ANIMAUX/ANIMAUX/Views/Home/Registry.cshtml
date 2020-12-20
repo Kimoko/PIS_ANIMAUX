@@ -1,19 +1,35 @@
 ﻿@model IEnumerable<ANIMAUX.Models.RegistryItems>
 
 @{
-    ViewBag.Title = "реестр";
-    
+    ViewBag.Title = "Реестр";
+
 }
-<h2>@ViewBag.Title.</h2>
-<h2>Тут будет таблица реестра с фильтрацией и сортировкой</h2>
-<div class="row my-3">
-    <div class="form-group">
-        <div class="col-md-10">
-            @ANIMAUX.Helpers.BootstrapHtml.Dropdown("dropdownSort", ViewBag.SortType, "Сортировка")
-        </div>
+<h2>@ViewBag.Title</h2>
+
+
+
+@using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
+{
+
+    <div class="col">@ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSort", ViewBag.DropDownSort, "Сортировка")</div>
+    <div class="col">
+        <input id="dateInput" type="date" min="01.01.2000" class="form-control" name="dateInput" />
+    </div>
+    <div class="col">
+        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSex", ViewBag.DropDownSex, "Пол")
+    </div>
+    <div class="col">
+        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownAge", ViewBag.DropDownAge, "Возраст")
+    </div>
+    <div class="col">
+        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownDistrict", ViewBag.DropDownCity, "Округ")
+    </div>
+    <div class="col">
+        <button class="btn btn-info" value="Registry">Применить</button>
     </div>
 
-</div>
+}
+
 
 <table class="table">
     <tr>
@@ -22,8 +38,8 @@
         <th>Дата размещения объявления</th>
         <th>Пол животного</th>
         <th>Возраст</th>
-        <th>Населенный пункт</th>
-        <th><input type="checkbox" class="form-check-input"></th>
+        <th>Округ</th>
+    
     </tr>
 
     @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>)
@@ -47,7 +63,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.districts.name)
             </td>
-            @if (true)
+            @if (false)
             {
                 <td>
                     <input type="checkbox" class="form-check-input">
