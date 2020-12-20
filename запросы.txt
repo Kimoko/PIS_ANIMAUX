@@ -1,0 +1,5 @@
+INSERT INTO animals ( category, name, birth_date, breed, sex) VALUES ('кот', 'Маркиз', '10.10.2018', 'нет', 'M')
+insert into districts (name) values ('Голышмановский')
+insert into organisations (name) values ('ОМСУ')
+insert into cards (organisation_id, district_id, animal_id, date_added) values (1,1,1,'12.12.2020')
+update animals set sex ='М' where sex = 'M'

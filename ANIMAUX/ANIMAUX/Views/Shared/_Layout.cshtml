@@ -1,5 +1,5 @@
 ﻿@{
-    var user = 2;
+    var user = 0;
 }
 <!DOCTYPE html>
 <html>
@@ -14,7 +14,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
 
@@ -44,19 +44,25 @@
                 }
 
             </ul>
-            @using (Html.BeginForm("addPet", "", FormMethod.Post))
+            @using (Html.BeginForm("addPet", "", FormMethod.Post, new { @class = "form-inline my-2 my-lg-0" }))
             {
-                if (user == 2)
+
+                switch (user)
                 {
-                    <form class="form-inline my-2 my-lg-0">
-                        <button class="btn btn-outline-info my-2 my-sm-0" value="addPet">Добавить объявление</button>
-                    </form>
+                    case 0: <button class="btn btn-outline-info mr-3 " value="addPet">Добавить карточку</button>
+                            <button class="btn btn-outline-info " value="addPet">Добавить объявление</button>
+                        break;
+                    case 1: <button class="btn btn-outline-info" value="addPet">Добавить карточку</button>
+                        break;
+                    case 2: <button class="btn btn-outline-info " value="addPet">Добавить объявление</button>
+                        break;
                 }
             }
-            </div>
-       
+
+        </div>
+
     </nav>
-    
+
 
     <div class="container body-content">
         @RenderBody()

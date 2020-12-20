@@ -34,6 +34,7 @@ namespace ANIMAUX.Controllers
             string sort_id = form["dropDownSort"];
             var registryItems = RegistryItems();
             IEnumerable<RegistryItems> result = registryItems;
+            //////////////////////////Filter/////////////////////////////
             if (date != "")
             {
                 var convertedDate = Convert.ToDateTime(date);
@@ -93,15 +94,10 @@ namespace ANIMAUX.Controllers
 
         public void FillDropDowns()
         {
-            ViewBag.DropDownSort = CreateSelectList(new List<string>() { "По умолчанию", "По возрастанию", "По убыванию" });
-            //////////////////////////Filter/////////////////////////////
-            //Пероид размещения объявления
-            //Пол животного (М / Ж)
+            ViewBag.DropDownSort = CreateSelectList(new List<string>() { "По умолчанию", "По возрастанию", "По убыванию" });        
             ViewBag.DropDownSex = CreateSelectList(new List<string>() { "М", "Ж" });
-            //Возраст животного (от 0 до 6 мес, от 6 мес до 1 года, от 1 года до 2 лет, от 2 лет до 5, от 5 и старше)
             ViewBag.DropDownAge = CreateSelectList(new List<string>() { "0 - 1 года", "1 года - 2 лет", "2 - 4 года", "4 - 6 лет", "от 6 и старше" });
-            //Округ
-            ViewBag.DropDownCity = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
+            ViewBag.DropDownDistrict = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
 
         }
         public IEnumerable<RegistryItems> RegistryItems()

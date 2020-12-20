@@ -6,8 +6,6 @@
 }
 <h2>@ViewBag.Title</h2>
 
-
-
 @using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
 {
 
@@ -22,15 +20,13 @@
         @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownAge", ViewBag.DropDownAge, "Возраст")
     </div>
     <div class="col">
-        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownDistrict", ViewBag.DropDownCity, "Округ")
+        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownDistrict", ViewBag.DropDownDistrict, "Округ")
     </div>
     <div class="col">
         <button class="btn btn-info" value="Registry">Применить</button>
     </div>
 
 }
-
-
 <table class="table">
     <tr>
         <th>№</th>
