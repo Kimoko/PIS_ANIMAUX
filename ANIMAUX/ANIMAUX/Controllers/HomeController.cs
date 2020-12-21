@@ -17,6 +17,7 @@ namespace ANIMAUX.Controllers
             return View();
         }
 
+        //////////////////////////РЕЕСТР///////////////////////////
         public ActionResult Registry()
         {
             FillDropDowns();
@@ -29,7 +30,7 @@ namespace ANIMAUX.Controllers
 
             string date = form["dateInput"];
             string sex = form["dropDownSex"];
-            char[] age = form["dropDownAge"].Where(c => Char.IsDigit(c)).ToArray();    
+            char[] age = form["dropDownAge"].Where(c => Char.IsDigit(c)).ToArray();
             string district = form["dropDownDistrict"];
             string sort_id = form["dropDownSort"];
             var registryItems = RegistryItems();
@@ -48,7 +49,7 @@ namespace ANIMAUX.Controllers
             }
             if (age.Length != 1)
             {
-                result =registryItems.Where(z => (DateTime.Now.Year-z.animals.birth_date.Year)>=Convert.ToInt32(Char.GetNumericValue(age[0])) && (DateTime.Now.Year - z.animals.birth_date.Year) < Convert.ToInt32(Char.GetNumericValue(age[1])));
+                result = registryItems.Where(z => (DateTime.Now.Year - z.animals.birth_date.Year) >= Convert.ToInt32(Char.GetNumericValue(age[0])) && (DateTime.Now.Year - z.animals.birth_date.Year) < Convert.ToInt32(Char.GetNumericValue(age[1])));
                 registryItems = result;
             }
             if (district != "-1")
@@ -73,27 +74,21 @@ namespace ANIMAUX.Controllers
             FillDropDowns();
             return View(ViewData["registryItems"]);
         }
-            public ActionResult Publications()
-        {
-//            ViewBag.Message = "Объявления";
-
-            return View(entities.publications.ToList());
-        }
 
         public List<SelectListItem> CreateSelectList(List<string> list)
         {
             List<SelectListItem> items = new List<SelectListItem>();
             items.Add(new SelectListItem { Text = list[0], Value = list[0], Selected = true });
-            for (int i=1; i<list.Count; i++)
+            for (int i = 1; i < list.Count; i++)
             {
-                items.Add(new SelectListItem { Text = list[i], Value = list[i].ToString()});
+                items.Add(new SelectListItem { Text = list[i], Value = list[i].ToString() });
             }
             return items;
         }
 
         public void FillDropDowns()
         {
-            ViewBag.DropDownSort = CreateSelectList(new List<string>() { "По умолчанию", "По возрастанию", "По убыванию" });        
+            ViewBag.DropDownSort = CreateSelectList(new List<string>() { "По умолчанию", "По возрастанию", "По убыванию" });
             ViewBag.DropDownSex = CreateSelectList(new List<string>() { "М", "Ж" });
             ViewBag.DropDownAge = CreateSelectList(new List<string>() { "0 - 1 года", "1 года - 2 лет", "2 - 4 года", "4 - 6 лет", "от 6 и старше" });
             ViewBag.DropDownDistrict = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
@@ -103,11 +98,10 @@ namespace ANIMAUX.Controllers
         {
             List<cards> cardsList = entities.cards.ToList();
             List<animals> animalsList = entities.animals.ToList();
-            List <districts> districtsList = entities.districts.ToList();
+            List<districts> districtsList = entities.districts.ToList();
 
             //может сделать создание запросов в другом классе? или хотя бы вынести их как отдельные методы
             ///////////////////////////Query////////////////////////////
-
 
             var registryItems = from c in cardsList
                                 join a in animalsList on c.animal_id equals a.passport_number
@@ -123,7 +117,8 @@ namespace ANIMAUX.Controllers
         public ActionResult DeleteCards(FormCollection form)
         {
             var card_id = Convert.ToInt32(form["cardId"]);
-            if (card_id != -1) {
+            if (card_id != -1)
+            {
                 cards card = new cards { id = card_id };
 
                 entities.cards.Attach(card);
@@ -134,7 +129,26 @@ namespace ANIMAUX.Controllers
             {
                 entities.Database.ExecuteSqlCommand("DELETE FROM[cards]");
             }
-            return Redirect(Url.Action("Registry","Home"));
+            return Redirect(Url.Action("Registry", "Home"));
+        }
+        ////////////////////////////КАРТА ЖИВОТНОГО////////////////////////////////
+        public ActionResult Card(int cardId)
+        {
+            ViewBag.cardId = cardId;
+            var card = entities.cards.Where(x => x.id == cardId).FirstOrDefault();
+            var animal = entities.animals.Where(x => x.passport_number == card.animal_id).FirstOrDefault();
+            var district = entities.districts.Where(x => x.id == card.district_id).FirstOrDefault();
+            ViewBag.card = card;
+            ViewBag.animal = animal;
+            ViewBag.district = district;
+            return View();
+        }
+        ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////
+        public ActionResult Publications()
+        {
+            // ViewBag.Message = "Объявления";
+
+            return View(entities.publications.ToList());
         }
     }
 
