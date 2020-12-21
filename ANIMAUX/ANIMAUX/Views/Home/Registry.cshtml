@@ -2,9 +2,11 @@
 
 @{
     ViewBag.Title = "Реестр";
+    var user = 0;
 
 }
 <h2>@ViewBag.Title</h2>
+
 
 @using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
 {
@@ -35,7 +37,17 @@
         <th>Пол животного</th>
         <th>Возраст</th>
         <th>Округ</th>
-    
+        <th>
+            @if (user == 0)
+            {
+                using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
+                {
+                    <input type="text" value="-1" name="cardId" id="cardId" hidden>
+                    <button class="btn btn-danger" value="DeleteCards">Удалить записи</button>
+                }
+            }
+        </th>
+
     </tr>
 
     @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>)
@@ -59,12 +71,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.districts.name)
             </td>
-            @if (false)
-            {
-                <td>
-                    <input type="checkbox" class="form-check-input">
-                </td>
-            }
+            <td>
+                @if (user == 0)
+                {
+                    using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
+                    {
+                        <input type="text" value=@item.cards.id name="cardId" id="cardId" hidden>
+                        <button class="btn btn-outline-danger" value="DeleteCards">Удалить запись</button>
+                    }
+                }
+            </td>
         </tr>
     }
 

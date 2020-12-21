@@ -73,8 +73,7 @@ namespace ANIMAUX.Controllers
             FillDropDowns();
             return View(ViewData["registryItems"]);
         }
-
-        public ActionResult Publications()
+            public ActionResult Publications()
         {
 //            ViewBag.Message = "Объявления";
 
@@ -120,7 +119,23 @@ namespace ANIMAUX.Controllers
                                 select new RegistryItems { cards = c, animals = a, districts = d };
             return registryItems;
         }
+        [HttpPost]
+        public ActionResult DeleteCards(FormCollection form)
+        {
+            var card_id = Convert.ToInt32(form["cardId"]);
+            if (card_id != -1) {
+                cards card = new cards { id = card_id };
 
+                entities.cards.Attach(card);
+                entities.cards.Remove(card);
+                entities.SaveChanges();
+            }
+            else
+            {
+                entities.Database.ExecuteSqlCommand("DELETE FROM[cards]");
+            }
+            return Redirect(Url.Action("Registry","Home"));
+        }
     }
 
 }
