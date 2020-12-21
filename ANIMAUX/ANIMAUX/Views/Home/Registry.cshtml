@@ -55,7 +55,7 @@
         <tr>
             <td>
                
-                @Html.ActionLink(item.cards.id.ToString(),"Card", "Home", new { cardId = item.cards.id },new { @class= "btn btn-outline-info" })
+                @Html.ActionLink(item.cards.id.ToString(),"Card", "Home", new { cardId = item.cards.id },new { @class= "btn btn-outline-info", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.animals.name)
