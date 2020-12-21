@@ -27,7 +27,7 @@ namespace ANIMAUX.Helpers
             return new MvcHtmlString(select.ToString());
         }
 
-        public static MvcHtmlString LabelInput(string label,string id, string viewBag="")
+        public static MvcHtmlString LabelInput(string label,string id, string viewBag="", string type="text")
         {
             /*
              <div class="form-group row">
@@ -52,8 +52,9 @@ namespace ANIMAUX.Helpers
 
             
             var input = new TagBuilder("input");
-            input.Attributes.Add("type", "text");
+            input.Attributes.Add("type", type);
             input.Attributes.Add("value", viewBag);
+            input.Attributes.Add("name", id);
             input.GenerateId(id);
             input.AddCssClass("form-control");
 

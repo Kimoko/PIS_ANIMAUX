@@ -61,10 +61,10 @@ namespace ANIMAUX.Controllers
             switch (sort_id)
             {
                 case "По возрастанию":
-                    result = registryItems.OrderBy(x => x.cards.animal_id);
+                    result = registryItems.OrderBy(x => x.cards.id);
                     break;
                 case "По убыванию":
-                    result = registryItems.OrderByDescending(x => x.cards.animal_id);
+                    result = registryItems.OrderByDescending(x => x.cards.id);
                     break;
                 default:
                     result = registryItems;
@@ -78,11 +78,13 @@ namespace ANIMAUX.Controllers
         public List<SelectListItem> CreateSelectList(List<string> list)
         {
             List<SelectListItem> items = new List<SelectListItem>();
+
             items.Add(new SelectListItem { Text = list[0], Value = list[0], Selected = true });
             for (int i = 1; i < list.Count; i++)
             {
                 items.Add(new SelectListItem { Text = list[i], Value = list[i].ToString() });
             }
+
             return items;
         }
 
@@ -94,6 +96,7 @@ namespace ANIMAUX.Controllers
             ViewBag.DropDownDistrict = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
 
         }
+
         public IEnumerable<RegistryItems> RegistryItems()
         {
             List<cards> cardsList = entities.cards.ToList();
@@ -134,7 +137,7 @@ namespace ANIMAUX.Controllers
         ////////////////////////////КАРТА ЖИВОТНОГО////////////////////////////////
         public ActionResult Card(string cardId)
         {
-            if (cardId != "New")
+            if (cardId != null)
             {
                 ViewBag.cardId = cardId;
                 int id = Convert.ToInt32(cardId);
@@ -148,8 +151,56 @@ namespace ANIMAUX.Controllers
             else
             {
                 ViewBag.cardId = "New";
+                List<SelectListItem> animals = new List<SelectListItem>();
+                var animalsdb = entities.animals;
+                foreach (var item in animalsdb)
+                {
+                    animals.Add(new SelectListItem { Text = String.Format("{0} | {1} | {2}", item.passport_number, item.name, item.birth_date.ToShortDateString()), Value = item.passport_number.ToString() });
+                }
+                ViewBag.animals = animals;
+
+                List<SelectListItem> districts = new List<SelectListItem>();
+                var districtsdb = entities.districts;
+                foreach (var item in districtsdb)
+                {
+                    districts.Add(new SelectListItem { Text = String.Format("{0} | {1}", item.id, item.name), Value = item.id.ToString() });
+                }
+
+                ViewBag.districts = districts;
+
+                List<SelectListItem> organisations = new List<SelectListItem>();
+                var organisationsdb = entities.organisations;
+                foreach (var item in organisationsdb)
+                {
+                    organisations.Add(new SelectListItem { Text = String.Format("{0} | {1}", item.id, item.name), Value = item.id.ToString() });
+                }
+
+                ViewBag.organisations = organisations;
             }
             return View();
+        }
+
+
+
+        [HttpPost]
+        public ActionResult AddCard(FormCollection form)
+        {
+            var animal_id = Convert.ToInt32(form["dropDownAnimals"]);
+            var district_id = Convert.ToInt32(form["dropDownDistricts"]);
+            var organisation_id = Convert.ToInt32(form["dropDownOrganisations"]);
+            var date_added = Convert.ToDateTime(form["date_added"]);
+
+            cards card = new cards
+            {
+                organisation_id = organisation_id,
+                district_id = district_id,
+                animal_id = animal_id,
+                date_added = date_added
+            };
+
+            entities.cards.Add(card);
+            entities.SaveChanges();
+            return Redirect(Url.Action("Registry", "Home"));
         }
         ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////
         public ActionResult Publications()
