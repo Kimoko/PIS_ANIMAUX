@@ -132,15 +132,23 @@ namespace ANIMAUX.Controllers
             return Redirect(Url.Action("Registry", "Home"));
         }
         ////////////////////////////КАРТА ЖИВОТНОГО////////////////////////////////
-        public ActionResult Card(int cardId)
+        public ActionResult Card(string cardId)
         {
-            ViewBag.cardId = cardId;
-            var card = entities.cards.Where(x => x.id == cardId).FirstOrDefault();
-            var animal = entities.animals.Where(x => x.passport_number == card.animal_id).FirstOrDefault();
-            var district = entities.districts.Where(x => x.id == card.district_id).FirstOrDefault();
-            ViewBag.card = card;
-            ViewBag.animal = animal;
-            ViewBag.district = district;
+            if (cardId != "New")
+            {
+                ViewBag.cardId = cardId;
+                int id = Convert.ToInt32(cardId);
+                var card = entities.cards.Where(x => x.id == id).FirstOrDefault();
+                var animal = entities.animals.Where(x => x.passport_number == card.animal_id).FirstOrDefault();
+                var district = entities.districts.Where(x => x.id == card.district_id).FirstOrDefault();
+                ViewBag.card = card;
+                ViewBag.animal = animal;
+                ViewBag.district = district;
+            }
+            else
+            {
+                ViewBag.cardId = "New";
+            }
             return View();
         }
         ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////

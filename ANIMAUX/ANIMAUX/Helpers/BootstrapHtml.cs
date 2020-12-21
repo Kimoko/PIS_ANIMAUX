@@ -27,6 +27,43 @@ namespace ANIMAUX.Helpers
             return new MvcHtmlString(select.ToString());
         }
 
+        public static MvcHtmlString LabelInput(string label,string id, string viewBag="")
+        {
+            /*
+             <div class="form-group row">
+                <label for="name" class="col-sm-3 col-form-label">Кличка животного</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" id="name" value=@ViewBag.animal.name>
+                </div>
+            </div>
+             */
+            var form_group = new TagBuilder("div");
+            form_group.AddCssClass("form-group");
+            form_group.AddCssClass("row");
+
+            var this_label = new TagBuilder("label");
+            this_label.Attributes.Add("for", id);
+            this_label.AddCssClass("col-sm-3");
+            this_label.AddCssClass("col-form-label");
+            this_label.SetInnerText(label);
+
+            var div = new TagBuilder("div");
+            div.AddCssClass("col-sm-6");
+
+            
+            var input = new TagBuilder("input");
+            input.Attributes.Add("type", "text");
+            input.Attributes.Add("value", viewBag);
+            input.GenerateId(id);
+            input.AddCssClass("form-control");
+
+            div.InnerHtml += input;
+
+            form_group.InnerHtml += this_label;
+            form_group.InnerHtml += div;
+            return new MvcHtmlString(form_group.ToString());
+
+        }
         public static MvcHtmlString Dropdown(string id, List<SelectListItem> selectListItems, string label)
         {
             var button = new TagBuilder("button")
