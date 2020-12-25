@@ -11,7 +11,7 @@ namespace ANIMAUX.Controllers
     public class HomeController : Controller
     {
         AnimauxEntities entities = new AnimauxEntities();
-
+        
         public ActionResult Profile()
         {
             return View();
@@ -114,6 +114,20 @@ namespace ANIMAUX.Controllers
                                 into table2
                                 from d in table2.DefaultIfEmpty()
                                 select new RegistryItems { cards = c, animals = a, districts = d };
+            CurrentUser.setUser("Админ", 0, 1, 0);
+            var user = CurrentUser.getUser();
+            var userRole = user.role;
+            var userDistrictId = user.district;
+            var userOrganisationId = user.organisation;
+            switch (userRole)
+            {
+                case 1: return registryItems;
+                case 2:
+                    {
+                        if (userDistrictId != 0) return registryItems.Where(x => x.cards.district_id == userDistrictId);
+                        else return registryItems.Where(x => x.cards.organisation_id == userOrganisationId);
+                    }
+            }
             return registryItems;
         }
         [HttpPost]

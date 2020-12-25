@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Реестр";
-    var user = 1;
+    var user = ANIMAUX.Controllers.CurrentUser.getUser().role;
 
 }
 <h2>@ViewBag.Title</h2>
@@ -38,7 +38,7 @@
         <th>Возраст</th>
         <th>Округ</th>
         <th>
-            @if (user == 0)
+            @if (user == 1)
             {
                 using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
                 {
@@ -72,7 +72,7 @@
                 @Html.DisplayFor(modelItem => item.districts.name)
             </td>
             <td>
-                @if (user == 0)
+                @if (user == 1)
                 {
                     using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
                     {
