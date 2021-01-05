@@ -22,6 +22,7 @@ namespace ANIMAUX.Controllers
         {
             FillDropDowns();
             ViewData["registryItems"] = RegistryItems();
+            ViewBag.View = 0;
             return View(ViewData["registryItems"]);
         }
         [HttpPost]
@@ -33,6 +34,7 @@ namespace ANIMAUX.Controllers
             char[] age = form["dropDownAge"].Where(c => Char.IsDigit(c)).ToArray();
             string district = form["dropDownDistrict"];
             string sort_id = form["dropDownSort"];
+            ViewBag.View = Convert.ToInt32(form["view"]);
             var registryItems = RegistryItems();
             IEnumerable<RegistryItems> result = registryItems;
             //////////////////////////Filter/////////////////////////////
@@ -57,6 +59,7 @@ namespace ANIMAUX.Controllers
                 result = registryItems.Where(z => z.districts.name.Equals(district));
                 registryItems = result;
             }
+            
             ///////////////////////////Sort/////////////////////////////
             switch (sort_id)
             {
@@ -103,7 +106,6 @@ namespace ANIMAUX.Controllers
             List<animals> animalsList = entities.animals.ToList();
             List<districts> districtsList = entities.districts.ToList();
 
-            //может сделать создание запросов в другом классе? или хотя бы вынести их как отдельные методы
             ///////////////////////////Query////////////////////////////
 
             var registryItems = from c in cardsList
