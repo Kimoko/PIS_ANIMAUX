@@ -3,3 +3,5 @@ insert into districts (name) values ('Голышмановский')
 insert into organisations (name) values ('ОМСУ')
 insert into cards (organisation_id, district_id, animal_id, date_added) values (1,1,1,'12.12.2020')
 update animals set sex ='М' where sex = 'M'
+delete from users where id = 5
+INSERT INTO users( name, surname, user_role, user_organistaion, user_district) VALUES ('Никита', 'Добряков', '2', '1', '1')

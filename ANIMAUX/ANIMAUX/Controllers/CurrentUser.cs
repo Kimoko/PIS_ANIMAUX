@@ -9,7 +9,7 @@ namespace ANIMAUX.Controllers
     {
         public string name = "";
         public int organisation = 1;
-        public int role = 1;
+        public int role = 0; //роли: 0 - админ | 1 - организации | 2 - пользователи
         public int district = -1;
         public bool isAutharized = false;
 

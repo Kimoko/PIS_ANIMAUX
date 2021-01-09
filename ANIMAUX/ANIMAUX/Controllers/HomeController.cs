@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ANIMAUX.Models;
 using ANIMAUX.Helpers;
-
+using ANIMAUX.Controllers;
 namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
@@ -102,35 +102,24 @@ namespace ANIMAUX.Controllers
 
         public IEnumerable<RegistryItems> RegistryItems()
         {
-            List<cards> cardsList = entities.cards.ToList();
-            List<animals> animalsList = entities.animals.ToList();
-            List<districts> districtsList = entities.districts.ToList();
-
-            ///////////////////////////Query////////////////////////////
-
-            var registryItems = from c in cardsList
-                                join a in animalsList on c.animal_id equals a.passport_number
-                                into table1
-                                from a in table1.DefaultIfEmpty()
-                                join d in districtsList on c.district_id equals d.id
-                                into table2
-                                from d in table2.DefaultIfEmpty()
-                                select new RegistryItems { cards = c, animals = a, districts = d };
-            CurrentUser.setUser("Админ", 0, 1, 0);
+            Registry registry = new Registry();
+            //CurrentUser.setUser("Админ", 0, 1, 0);
+            CurrentUser.setUser("Куратор ВетСлужбы", 1, 2, 1); //id = 4
             var user = CurrentUser.getUser();
-            var userRole = user.role;
-            var userDistrictId = user.district;
-            var userOrganisationId = user.organisation;
+            var userRole = user.role; //access_level
+            IEnumerable<RegistryItems> registries = null;
             switch (userRole)
             {
-                case 1: return registryItems;
+                case 1: registries = registry.GetLists();
+                    break;
                 case 2:
                     {
-                        if (userDistrictId != 0) return registryItems.Where(x => x.cards.district_id == userDistrictId);
-                        else return registryItems.Where(x => x.cards.organisation_id == userOrganisationId);
+                        registry.GetListsByDistrict(user);
+                        registries = registry.GetListsByOrganisation(user);
+                        break;
                     }
             }
-            return registryItems;
+            return registries;
         }
         [HttpPost]
         public ActionResult DeleteCards(FormCollection form)
@@ -218,6 +207,12 @@ namespace ANIMAUX.Controllers
             entities.SaveChanges();
             return Redirect(Url.Action("Registry", "Home"));
         }
+
+
+
+
+
+
         ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////
         public ActionResult Publications()
         {
