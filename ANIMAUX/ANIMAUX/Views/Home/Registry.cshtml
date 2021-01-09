@@ -70,13 +70,13 @@
                     @Html.DisplayFor(modelItem => item.animals.name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.cards.date_added)
+                    @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.animals.sex)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.animals.birth_date)
+                    @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.districts.name)
@@ -107,13 +107,13 @@ else if (view == 1)
             <div class="card mx-4 my-3" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">Кличка животного: <br />@Html.DisplayFor(modelItem => item.animals.name)</h5>
-                    <p class="card-text">Дата размещения объявления: @Html.DisplayFor(modelItem => item.cards.date_added)</p>
+                    <p class="card-text">Дата размещения объявления: @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")</p>
                     <p class="card-text">Пол животного: @Html.DisplayFor(modelItem => item.animals.sex)</p>
-                    <p class="card-text">Возраст: @Html.DisplayFor(modelItem => item.animals.birth_date)</p>
+                    <p class="card-text">Возраст:  @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")</p>
                     <p class="card-text">Округ:  @Html.DisplayFor(modelItem => item.districts.name)</p>
-
-                    @Html.ActionLink(item.cards.id.ToString(), "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
-
+                    <div class="row my-3 justify-content-center">
+                        @Html.ActionLink("Открыть", "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info col-6", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
+                    </div>
                     @if (user == 1)
                     {
                         using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post, new { @class = "row my-3 justify-content-center" }))

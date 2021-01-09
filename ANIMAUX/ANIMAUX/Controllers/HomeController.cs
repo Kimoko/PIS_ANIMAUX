@@ -18,6 +18,28 @@ namespace ANIMAUX.Controllers
         }
 
         //////////////////////////РЕЕСТР///////////////////////////
+        public IEnumerable<RegistryItems> RegistryItems()
+        {
+            Registry registry = new Registry();
+            CurrentUser.setUser("Админ", 0, 1, 0);
+            //CurrentUser.setUser("Куратор ВетСлужбы", 1, 2, 1); //id = 4
+            var user = CurrentUser.getUser();
+            var userRole = user.role; //access_level
+            IEnumerable<RegistryItems> registries = null;
+            switch (userRole)
+            {
+                case 1:
+                    registries = registry.GetLists();
+                    break;
+                case 2:
+                    {
+                        registry.GetListsByDistrict(user);
+                        registries = registry.GetListsByOrganisation(user);
+                        break;
+                    }
+            }
+            return registries;
+        }
         public ActionResult Registry()
         {
             FillDropDowns();
@@ -28,16 +50,34 @@ namespace ANIMAUX.Controllers
         [HttpPost]
         public ActionResult Registry(FormCollection form)
         {
-
             string date = form["dateInput"];
             string sex = form["dropDownSex"];
             char[] age = form["dropDownAge"].Where(c => Char.IsDigit(c)).ToArray();
             string district = form["dropDownDistrict"];
             string sort_id = form["dropDownSort"];
+
             ViewBag.View = Convert.ToInt32(form["view"]);
-            var registryItems = RegistryItems();
+            var registryItems = Filter(RegistryItems(), date, sex, age, district);
+            var result = Sort(registryItems, sort_id);        
+            ViewData["registryItems"] = result;
+            FillDropDowns();
+            return View(ViewData["registryItems"]);
+        }
+        private IEnumerable<RegistryItems> Sort(IEnumerable<RegistryItems> registryItems, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "По возрастанию":
+                    return registryItems.OrderBy(x => x.cards.id);
+                case "По убыванию":
+                    return registryItems.OrderByDescending(x => x.cards.id);
+                default:
+                    return registryItems;
+            }
+        }
+        private IEnumerable<RegistryItems> Filter(IEnumerable<RegistryItems> registryItems, string date, string sex, char[] age, string district)
+        {
             IEnumerable<RegistryItems> result = registryItems;
-            //////////////////////////Filter/////////////////////////////
             if (date != "")
             {
                 var convertedDate = Convert.ToDateTime(date);
@@ -59,25 +99,8 @@ namespace ANIMAUX.Controllers
                 result = registryItems.Where(z => z.districts.name.Equals(district));
                 registryItems = result;
             }
-            
-            ///////////////////////////Sort/////////////////////////////
-            switch (sort_id)
-            {
-                case "По возрастанию":
-                    result = registryItems.OrderBy(x => x.cards.id);
-                    break;
-                case "По убыванию":
-                    result = registryItems.OrderByDescending(x => x.cards.id);
-                    break;
-                default:
-                    result = registryItems;
-                    break;
-            }
-            ViewData["registryItems"] = result;
-            FillDropDowns();
-            return View(ViewData["registryItems"]);
+            return registryItems;
         }
-
         public List<SelectListItem> CreateSelectList(List<string> list)
         {
             List<SelectListItem> items = new List<SelectListItem>();
@@ -100,45 +123,8 @@ namespace ANIMAUX.Controllers
 
         }
 
-        public IEnumerable<RegistryItems> RegistryItems()
-        {
-            Registry registry = new Registry();
-            //CurrentUser.setUser("Админ", 0, 1, 0);
-            CurrentUser.setUser("Куратор ВетСлужбы", 1, 2, 1); //id = 4
-            var user = CurrentUser.getUser();
-            var userRole = user.role; //access_level
-            IEnumerable<RegistryItems> registries = null;
-            switch (userRole)
-            {
-                case 1: registries = registry.GetLists();
-                    break;
-                case 2:
-                    {
-                        registry.GetListsByDistrict(user);
-                        registries = registry.GetListsByOrganisation(user);
-                        break;
-                    }
-            }
-            return registries;
-        }
-        [HttpPost]
-        public ActionResult DeleteCards(FormCollection form)
-        {
-            var card_id = Convert.ToInt32(form["cardId"]);
-            if (card_id != -1)
-            {
-                cards card = new cards { id = card_id };
+       
 
-                entities.cards.Attach(card);
-                entities.cards.Remove(card);
-                entities.SaveChanges();
-            }
-            else
-            {
-                entities.Database.ExecuteSqlCommand("DELETE FROM[cards]");
-            }
-            return Redirect(Url.Action("Registry", "Home"));
-        }
         ////////////////////////////КАРТА ЖИВОТНОГО////////////////////////////////
         public ActionResult Card(string cardId)
         {
@@ -185,7 +171,24 @@ namespace ANIMAUX.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult DeleteCards(FormCollection form)
+        {
+            var card_id = Convert.ToInt32(form["cardId"]);
+            if (card_id != -1)
+            {
+                cards card = new cards { id = card_id };
 
+                entities.cards.Attach(card);
+                entities.cards.Remove(card);
+                entities.SaveChanges();
+            }
+            else
+            {
+                entities.Database.ExecuteSqlCommand("DELETE FROM[cards]");
+            }
+            return Redirect(Url.Action("Registry", "Home"));
+        }
 
         [HttpPost]
         public ActionResult AddCard(FormCollection form)
