@@ -20,14 +20,14 @@
 
                 @switch (user)
                 {
-                    case 1:
+                    case 0:
                         <li class="nav-item">@Html.ActionLink("Реестр", "Registry", "Home", new { @class = "nav-link" })</li>
                         <li class="nav-item">@Html.ActionLink("Объявления", "Publications", "Home", new { @class = "nav-link" })</li>
                         break;
-                    case 2:
+                    case 1:
                         <li class="nav-item">@Html.ActionLink("Реестр", "Registry", "Home", new { @class = "nav-link" })</li>
                         break;
-                    case 3:
+                    case 2:
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Личный кабинет
@@ -49,12 +49,12 @@
 
                 switch (user)
                 {
-                    case 1: <button class="btn btn-outline-info mr-3 " value="Card">Добавить карточку</button>
+                    case 0: <button class="btn btn-outline-info mr-3 " value="Card">Добавить карточку</button>
                             <button class="btn btn-outline-info " value="addPet">Добавить объявление</button>
                         break;
-                    case 2: <button class="btn btn-outline-info" value="Card">Добавить карточку</button>
+                    case 1: <button class="btn btn-outline-info" value="Card">Добавить карточку</button>
                         break;
-                    case 3: <button class="btn btn-outline-info " value="addPet">Добавить объявление</button>
+                    case 2: <button class="btn btn-outline-info " value="addPet">Добавить объявление</button>
                         break;
                 }
             }

@@ -48,7 +48,7 @@
             <th>Возраст</th>
             <th>Округ</th>
             <th>
-                @if (user == 1)
+                @if (user == 0)
                 {
                     using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
                     {
@@ -82,7 +82,7 @@
                     @Html.DisplayFor(modelItem => item.districts.name)
                 </td>
                 <td>
-                    @if (user == 1)
+                    @if (user == 0)
                     {
                         using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
                         {
