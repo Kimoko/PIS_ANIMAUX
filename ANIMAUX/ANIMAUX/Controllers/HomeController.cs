@@ -21,8 +21,9 @@ namespace ANIMAUX.Controllers
         public IEnumerable<RegistryItems> RegistryItems()
         {
             Registry registry = new Registry();
-           // CurrentUser.setUser("Админ", 0, 0, 0);
-            CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1); //id = 4
+            // CurrentUser.setUser("Админ", 0, 0, 0);
+            // CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1); //id = 4
+            CurrentUser.setUser("Пользователь", 0, 2, 1); //id = 4
             var user = CurrentUser.getUser();
             var userRole = user.role; //access_level
             IEnumerable<RegistryItems> registries = null;

@@ -6,124 +6,127 @@
     var view = ViewBag.View;
 
 }
-<h2>@ViewBag.Title</h2>
-
-
-@using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
+@if (user != 2)
 {
+    <h2>@ViewBag.Title</h2>
 
-    <div class="col">@ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSort", ViewBag.DropDownSort, "Сортировка")</div>
-    <div class="col">
-        <select name="view" class="custom-select">
-            <option selected value="0">Таблица</option>
-            <option value="1">Карточки</option>
-        </select>
-    </div>
-    <div class="col">
-        <input id="dateInput" type="date" min="01.01.2000" class="form-control" name="dateInput" />
-    </div>
-    <div class="col">
-        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSex", ViewBag.DropDownSex, "Пол")
-    </div>
-    <div class="col">
-        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownAge", ViewBag.DropDownAge, "Возраст")
-    </div>
-    <div class="col">
-        @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownDistrict", ViewBag.DropDownDistrict, "Округ")
-    </div>
 
-    <div class="col">
-        <button class="btn btn-info" value="Registry">Применить</button>
-    </div>
+    using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
+    {
 
-}
-@if (view == 0)
-{
-    <table class="table">
-        <tr>
-            <th>№</th>
-            <th>Кличка животного</th>
-            <th>Дата размещения объявления</th>
-            <th>Пол животного</th>
-            <th>Возраст</th>
-            <th>Округ</th>
-            <th>
-                @if (user == 0)
-                {
-                    using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
-                    {
-                        <input type="text" value="-1" name="cardId" id="cardId" hidden>
-                        <button class="btn btn-danger" value="DeleteCards">Удалить всё</button>
-                    }
-                }
-            </th>
+        <div class="col">@ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSort", ViewBag.DropDownSort, "Сортировка")</div>
+        <div class="col">
+            <select name="view" class="custom-select">
+                <option selected value="0">Таблица</option>
+                <option value="1">Карточки</option>
+            </select>
+        </div>
+        <div class="col">
+            <input id="dateInput" type="date" min="01.01.2000" class="form-control" name="dateInput" />
+        </div>
+        <div class="col">
+            @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownSex", ViewBag.DropDownSex, "Пол")
+        </div>
+        <div class="col">
+            @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownAge", ViewBag.DropDownAge, "Возраст")
+        </div>
+        <div class="col">
+            @ANIMAUX.Helpers.BootstrapHtml.MyDropdown("dropDownDistrict", ViewBag.DropDownDistrict, "Округ")
+        </div>
 
-        </tr>
+        <div class="col">
+            <button class="btn btn-info" value="Registry">Применить</button>
+        </div>
 
-        @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>)
-        {
+    }
+    if (view == 0)
+    {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.ActionLink(item.cards.id.ToString(), "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.animals.name)
-                </td>
-                <td>
-                    @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.animals.sex)
-                </td>
-                <td>
-                    @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.districts.name)
-                </td>
-                <td>
+                <th>№</th>
+                <th>Кличка животного</th>
+                <th>Дата размещения объявления</th>
+                <th>Пол животного</th>
+                <th>Возраст</th>
+                <th>Округ</th>
+                <th>
                     @if (user == 0)
                     {
                         using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
                         {
-                            <input type="text" value=@item.cards.id name="cardId" id="cardId" hidden>
-                            <button class="btn btn-outline-danger" value="DeleteCards">Удалить</button>
+                            <input type="text" value="-1" name="cardId" id="cardId" hidden>
+                            <button class="btn btn-danger" value="DeleteCards">Удалить всё</button>
                         }
                     }
-                </td>
+                </th>
+
             </tr>
-        }
 
-    </table>
-}
-
-else if (view == 1)
-{
-    <div class="d-flex flex-wrap">
-        @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>
-            )
-        {
-
-            <div class="card mx-4 my-3" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Кличка животного: <br />@Html.DisplayFor(modelItem => item.animals.name)</h5>
-                    <p class="card-text">Дата размещения объявления: @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")</p>
-                    <p class="card-text">Пол животного: @Html.DisplayFor(modelItem => item.animals.sex)</p>
-                    <p class="card-text">Возраст:  @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")</p>
-                    <p class="card-text">Округ:  @Html.DisplayFor(modelItem => item.districts.name)</p>
-                    <div class="row my-3 justify-content-center">
-                        @Html.ActionLink("Открыть", "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info col-6", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
-                    </div>
-                    @if (user == 1)
-                    {
-                        using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post, new { @class = "row my-3 justify-content-center" }))
+            @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.cards.id.ToString(), "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.animals.name)
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.animals.sex)
+                    </td>
+                    <td>
+                        @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.districts.name)
+                    </td>
+                    <td>
+                        @if (user == 0)
                         {
-                            <input class="col " type="text" value=@item.cards.id name="cardId" id="cardId" hidden>
-                            <button class="btn btn-outline-danger col-6" value="DeleteCards">Удалить</button>
+                            using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post))
+                            {
+                                <input type="text" value=@item.cards.id name="cardId" id="cardId" hidden>
+                                <button class="btn btn-outline-danger" value="DeleteCards">Удалить</button>
+                            }
                         }
-                    }
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+
+    else if (view == 1)
+    {
+        <div class="d-flex flex-wrap">
+            @foreach (var item in ViewData["registryItems"] as IEnumerable<ANIMAUX.Models.RegistryItems>
+                )
+            {
+
+                <div class="card mx-4 my-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Кличка животного: <br />@Html.DisplayFor(modelItem => item.animals.name)</h5>
+                        <p class="card-text">Дата размещения объявления: @Convert.ToDateTime(item.cards.date_added).ToString("dd/MM/yyyy")</p>
+                        <p class="card-text">Пол животного: @Html.DisplayFor(modelItem => item.animals.sex)</p>
+                        <p class="card-text">Возраст:  @Convert.ToDateTime(item.animals.birth_date).ToString("dd/MM/yyyy")</p>
+                        <p class="card-text">Округ:  @Html.DisplayFor(modelItem => item.districts.name)</p>
+                        <div class="row my-3 justify-content-center">
+                            @Html.ActionLink("Открыть", "Card", "Home", new { cardId = item.cards.id }, new { @class = "btn btn-outline-info col-6", @data_toggle = "tooltip", @data_placement = "left", @title = "Перейти к карте животного" })
+                        </div>
+                        @if (user == 1)
+                        {
+                            using (Html.BeginForm("DeleteCards", "Home", FormMethod.Post, new { @class = "row my-3 justify-content-center" }))
+                            {
+                                <input class="col " type="text" value=@item.cards.id name="cardId" id="cardId" hidden>
+                                <button class="btn btn-outline-danger col-6" value="DeleteCards">Удалить</button>
+                            }
+                        }
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
 }
