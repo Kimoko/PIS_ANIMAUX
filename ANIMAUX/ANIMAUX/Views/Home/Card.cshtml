@@ -24,6 +24,8 @@
                     <!--<button class="col-sm-2 mr-3 btn btn-warning">Изменить</button>-->
                     <button class="col-sm-2 btn btn-danger" value="DeleteCards">Удалить</button>
                 </div>
+
+                @Html.ActionLink("Изменить", "Card", "Edit", new { id = ViewBag.cardId}, null)
             }
         }
         else

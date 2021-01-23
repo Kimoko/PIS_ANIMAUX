@@ -6,7 +6,12 @@
     var view = ViewBag.View;
 
 }
-@if (user != 2)
+<h2>@ViewBag.Title</h2>
+
+@Html.ActionLink("Экспортировать в word", "ExportWord", "Edit")
+
+
+@using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
 {
     <h2>@ViewBag.Title</h2>
 
