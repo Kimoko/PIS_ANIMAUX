@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
-using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using System.Web.Mvc;
 using ANIMAUX.Models;
+using GemBox.Document;
+using GemBox.Spreadsheet;
 
 namespace ANIMAUX.Controllers
 {
@@ -86,7 +91,73 @@ namespace ANIMAUX.Controllers
 
             entities.SaveChanges();
 
-            return Redirect(Url.Action("Cards", "Home"));
+            return Redirect(Url.Action("Registry", "Home"));
         }
+
+
+        public ActionResult ExportWord()
+        {
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
+            // Load template document.
+            DocumentModel document = new DocumentModel();
+
+            string resp = "";
+
+            foreach (var card in entities.cards)
+            {
+                resp += "id: " + card.id + ", Организация: " + card.organisations.name
+                    + ", Район: " + card.districts.name + ", Животное:" + card.animals.name +
+                    ", Добавлено:" + card.date_added.ToString();
+            }
+
+            document.Sections.Add(
+                new Section(document,
+                new Paragraph(document,
+                new Run(document, resp))));
+
+            // Create document in specified format (PDF, DOCX, etc.) and
+            // stream (download) it to client's browser.
+            document.Save(this.Response, $"export{".docx"}");
+
+            return Redirect(Url.Action("Registry", "Home"));
+        }
+
+        public ActionResult ExportExcel()
+        {
+            SpreadsheetInfo.SetLicense("FREE-LIMITED-KEY");
+
+            // Create Excel file.
+            var workbook = new ExcelFile();
+
+            // Add a new worksheet to the Excel file.
+            var worksheet = workbook.Worksheets.Add("Публикации");
+
+            worksheet.Cells["A1"].Value = "id";
+            worksheet.Cells["B1"].Value = "Добавлено";
+            worksheet.Cells["C1"].Value = "Фотка";
+            worksheet.Cells["D1"].Value = "Город";
+            worksheet.Cells["E1"].Value = "Животное";
+            worksheet.Cells["F1"].Value = "Тип";
+
+            int i = 2;
+            foreach (publications pub in entities.publications)
+            {
+                worksheet.Cells["A" + i].Value = pub.id;
+                worksheet.Cells["B" + i].Value = pub.added_date.ToString();
+                worksheet.Cells["C" + i].Value = pub.photo;
+                worksheet.Cells["D" + i].Value = pub.city;
+                worksheet.Cells["E" + i].Value = pub.animals.name;
+                worksheet.Cells["F" + i].Value = pub.type == "l" ? "Потеряно" : "Найдено";
+                i++;
+            }
+
+            // Create document in specified format (PDF, DOCX, etc.) and
+            // stream (download) it to client's browser.
+            workbook.Save(this.Response, $"export{".xlsx"}");
+
+            return Redirect(Url.Action("Publications", "Home"));
+        }
+
     }
 }

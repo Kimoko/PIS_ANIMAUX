@@ -8,6 +8,8 @@
 }
 <h2>@ViewBag.Title</h2>
 
+@Html.ActionLink("Экспортировать в word", "ExportWord", "Edit")
+
 
 @using (Html.BeginForm("Registry", "Home", FormMethod.Post, new { @class = "row my-3" }))
 {

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <ShouldIncludePkcs11Mock Condition=" '$(TargetFrameworkIdentifier)' == 'Xamarin.iOS' AND '$(ShouldIncludePkcs11Mock)' == '' ">True</ShouldIncludePkcs11Mock>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <_Pkcs11MockCurrPath>$([System.IO.Path]::GetDirectoryName('$(MSBuildThisFileDirectory)'))</_Pkcs11MockCurrPath>
+        <_Pkcs11MockDirName>$([System.IO.Path]::GetFileName('$(_Pkcs11MockCurrPath)'))</_Pkcs11MockDirName>
+        <_Pkcs11MockRootDir>$(MSBuildThisFileDirectory)..\..\build\$(_Pkcs11MockDirName)\</_Pkcs11MockRootDir>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" '$(ShouldIncludePkcs11Mock)' != 'False' ">
+        <NativeReference Include="$(_Pkcs11MockRootDir)libpkcs11-mock.a" Kind="Static" IsCxx="true" ForceLoad="True" SmartLink="true" />
+    </ItemGroup>
+
+</Project>

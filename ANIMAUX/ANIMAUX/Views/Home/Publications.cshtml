@@ -11,10 +11,12 @@
         <td>Тип</td>
     </tr>
 
-    @if(ViewBag.error != null)
+    @if (ViewBag.error != null)
     {
         @ViewBag.error
     }
+
+    @Html.ActionLink("Экспортировать в Excel", "ExportExcel", "Edit")
 
     @foreach (var item in ViewBag.Pubs as IEnumerable<ANIMAUX.Models.publications>)
     {
@@ -27,7 +29,7 @@
             <td>
                 @foreach (var anim in ViewBag.animals as IEnumerable<ANIMAUX.Models.animals>)
                 {
-                    if(item.animal_id == anim.passport_number)
+                    if (item.animal_id == anim.passport_number)
                     {
                         @Html.DisplayFor(modelItem => anim.name);
                         break;
@@ -36,7 +38,8 @@
             </td>
             <td>
                 @Html.ActionLink("Изменить", "Publication", "Edit", new { id = item.id }, null)
-                @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null) </td>
+                @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null)
+            </td>
             <td>@Html.DisplayFor(modelItem => item.city)</td>
             <td>@(@Html.DisplayFor(modelItem => item.type).ToString() == "l" ? "Потеряно" : "Найден")
         </tr>
