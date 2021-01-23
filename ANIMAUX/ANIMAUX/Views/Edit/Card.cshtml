@@ -1,0 +1,55 @@
+﻿<h3>Изменить карточку</h3>
+@using (Html.BeginForm("Card", "Edit", FormMethod.Post, new { @class = "mt-3" }))
+{
+    <div class="form-group row">
+        Id
+        <div>
+            <input readonly type="text" name="id" id="id" value="@ViewBag.id">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        Добавлено
+        <div>
+            <input type="date" readonly name="newDate" id="newDate" value="@ViewBag.added">
+        </div>
+    </div>
+
+    <div class="form-group row">
+        Кличка
+        <div>
+            <input type="text" name="newName" id="newUrl" value=@ViewBag.name>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        Пол
+        <input type="radio" id="cock" name="sex" value="м" @(ViewBag.sex == "М" ? "checked" : "")>Хлопец <br>
+        <input type="radio" id="cock" name="sex" value="ж" @(ViewBag.sex == "Ж" ? "checked" : "")> Дивчина <br>
+    </div>
+
+    <div class="form-group row">
+        Дата рождения
+        <div>
+            <input type="date" name="newBirthDate" id="newBirthDate" value=@ViewBag.birthDate>
+        </div>
+    </div> 
+
+    <div class="form-group row">
+        <select name="newDist">
+            @foreach (var item in ViewBag.districts as IEnumerable<ANIMAUX.Models.districts>)
+            {
+                <option value="@Html.DisplayFor(id => item.id)"
+                        @(ViewBag.dist == item.id ? "selected" : "")>
+                    @Html.DisplayFor(modelItem => item.name)
+                </option>
+            }
+        </select>
+    </div>
+
+
+    <div class="form-group row">
+        <input type="submit" value="Изменить">
+        @Html.ActionLink("Отмена", "Cards", "Home")
+    </div>
+}

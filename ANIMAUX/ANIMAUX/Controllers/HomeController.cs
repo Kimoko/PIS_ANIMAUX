@@ -120,7 +120,6 @@ namespace ANIMAUX.Controllers
             ViewBag.DropDownSex = CreateSelectList(new List<string>() { "М", "Ж" });
             ViewBag.DropDownAge = CreateSelectList(new List<string>() { "0 - 1 года", "1 года - 2 лет", "2 - 4 года", "4 - 6 лет", "от 6 и старше" });
             ViewBag.DropDownDistrict = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
-
         }
 
        
@@ -212,16 +211,50 @@ namespace ANIMAUX.Controllers
         }
 
 
-
-
-
-
         ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////
         public ActionResult Publications()
         {
-            // ViewBag.Message = "Объявления";
+            ViewBag.Pubs = entities.publications;
+            ViewBag.Animals = entities.animals;
+            CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1);
+            return View();
+        }
 
-            return View(entities.publications.ToList());
+        public ActionResult RemovePublication(int id)
+        {
+            publications pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
+            entities.publications.Remove(pub);
+            try
+            {
+                entities.SaveChanges();
+            }
+            catch
+            {}
+            return Redirect(Url.Action("Publications", "Home"));
+        }
+
+        public ActionResult AddPublication(FormCollection form)
+        {
+            string photoUrl = form["addUrl"];
+            string city = form["addCity"];
+            var type = form["type"] == "lost" ? "l" : "f";
+
+            var animal = form["addAnimal"];
+            var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
+
+            publications pub = new publications
+            {
+                added_date = DateTime.Now,
+                photo = photoUrl,
+                city = city,
+                type = type,
+                animal_id = animalId
+            };
+
+            entities.publications.Add(pub);
+            entities.SaveChanges();
+
+            return Redirect(Url.Action("Publications", "Home"));
         }
     }
 
