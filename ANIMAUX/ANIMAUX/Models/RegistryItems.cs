@@ -7,9 +7,9 @@ namespace ANIMAUX.Models
 {
     public class RegistryItems
     {
-        public cards cards { get; set; }
-        public animals animals { get; set; }
-        public districts districts { get; set; }
+        public card cards { get; set; }
+        public animal animals { get; set; }
+        public district districts { get; set; }
 
     }
 }

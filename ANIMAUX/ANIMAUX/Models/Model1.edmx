@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище AnimauxModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MAMKATVAYAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="animals">
           <Key>
             <PropertyRef Name="passport_number" />
@@ -14,17 +14,17 @@
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="birth_date" Type="date" Nullable="false" />
           <Property Name="breed" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="sex" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="sex" Type="varchar" MaxLength="1" Nullable="false" />
         </EntityType>
         <EntityType Name="cards">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date_added" Type="date" Nullable="false" />
           <Property Name="organisation_id" Type="int" Nullable="false" />
           <Property Name="district_id" Type="int" Nullable="false" />
           <Property Name="animal_id" Type="int" Nullable="false" />
-          <Property Name="date_added" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="districts">
           <Key>
@@ -44,7 +44,7 @@
           <Key>
             <PropertyRef Name="photo_url" />
           </Key>
-          <Property Name="photo_url" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="photo_url" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="pub_id" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="publications">
@@ -53,7 +53,7 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" />
           <Property Name="added_date" Type="date" Nullable="false" />
-          <Property Name="photo" Type="text" Nullable="false" />
+          <Property Name="main_photo" Type="text" Nullable="false" />
           <Property Name="city" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="animal_id" Type="int" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="1" Nullable="false" />
@@ -83,9 +83,9 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="surname" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="user_role" Type="int" Nullable="false" />
-          <Property Name="user_organistaion" Type="int" Nullable="false" />
-          <Property Name="user_district" Type="int" Nullable="false" />
+          <Property Name="user_role" Type="int" />
+          <Property Name="user_organistaion" Type="int" />
+          <Property Name="user_district" Type="int" />
         </EntityType>
         <Association Name="FK_cards_animals">
           <End Role="animals" Type="Self.animals" Multiplicity="1" />
@@ -148,7 +148,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_districts">
-          <End Role="districts" Type="Self.districts" Multiplicity="1" />
+          <End Role="districts" Type="Self.districts" Multiplicity="0..1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="districts">
@@ -160,7 +160,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_organisations">
-          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
+          <End Role="organisations" Type="Self.organisations" Multiplicity="0..1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organisations">
@@ -172,7 +172,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_roles">
-          <End Role="roles" Type="Self.roles" Multiplicity="1" />
+          <End Role="roles" Type="Self.roles" Multiplicity="0..1" />
           <End Role="users" Type="Self.users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="roles">
@@ -214,7 +214,7 @@
           <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="Хранилище AnimauxModelContainer">
+        <EntityContainer Name="MAMKATVAYAModelStoreContainer">
           <EntitySet Name="animals" EntityType="Self.animals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="cards" EntityType="Self.cards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="districts" EntityType="Self.districts" Schema="dbo" store:Type="Tables" />
@@ -261,8 +261,8 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="AnimauxModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="animals">
+      <Schema Namespace="MAMKATVAYAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="animal">
           <Key>
             <PropertyRef Name="passport_number" />
           </Key>
@@ -271,24 +271,24 @@
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="birth_date" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="breed" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="sex" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="sex" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="cards" Relationship="Self.FK_cards_animals" FromRole="animals" ToRole="cards" />
           <NavigationProperty Name="publications" Relationship="Self.FK_publications_animals" FromRole="animals" ToRole="publications" />
         </EntityType>
-        <EntityType Name="cards">
+        <EntityType Name="card">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date_added" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="organisation_id" Type="Int32" Nullable="false" />
           <Property Name="district_id" Type="Int32" Nullable="false" />
           <Property Name="animal_id" Type="Int32" Nullable="false" />
-          <Property Name="date_added" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="animals" Relationship="Self.FK_cards_animals" FromRole="cards" ToRole="animals" />
-          <NavigationProperty Name="districts" Relationship="Self.FK_cards_districts" FromRole="cards" ToRole="districts" />
-          <NavigationProperty Name="organisations" Relationship="Self.FK_cards_organisations" FromRole="cards" ToRole="organisations" />
+          <NavigationProperty Name="animal" Relationship="Self.FK_cards_animals" FromRole="cards" ToRole="animals" />
+          <NavigationProperty Name="district" Relationship="Self.FK_cards_districts" FromRole="cards" ToRole="districts" />
+          <NavigationProperty Name="organisation" Relationship="Self.FK_cards_organisations" FromRole="cards" ToRole="organisations" />
         </EntityType>
-        <EntityType Name="districts">
+        <EntityType Name="district">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -297,7 +297,7 @@
           <NavigationProperty Name="cards" Relationship="Self.FK_cards_districts" FromRole="districts" ToRole="cards" />
           <NavigationProperty Name="users" Relationship="Self.FK_users_districts" FromRole="districts" ToRole="users" />
         </EntityType>
-        <EntityType Name="organisations">
+        <EntityType Name="organisation">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -310,24 +310,24 @@
           <Key>
             <PropertyRef Name="photo_url" />
           </Key>
-          <Property Name="photo_url" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="photo_url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="pub_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="publications" Relationship="Self.FK_photos_by_pubs_publications" FromRole="photos_by_pubs" ToRole="publications" />
+          <NavigationProperty Name="publication" Relationship="Self.FK_photos_by_pubs_publications" FromRole="photos_by_pubs" ToRole="publications" />
         </EntityType>
-        <EntityType Name="publications">
+        <EntityType Name="publication">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" />
           <Property Name="added_date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="main_photo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="city" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="animal_id" Type="Int32" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="animals" Relationship="Self.FK_publications_animals" FromRole="publications" ToRole="animals" />
+          <NavigationProperty Name="animal" Relationship="Self.FK_publications_animals" FromRole="publications" ToRole="animals" />
           <NavigationProperty Name="photos_by_pubs" Relationship="Self.FK_photos_by_pubs_publications" FromRole="publications" ToRole="photos_by_pubs" />
         </EntityType>
-        <EntityType Name="roles">
+        <EntityType Name="role">
           <Key>
             <PropertyRef Name="id" />
           </Key>
@@ -336,7 +336,7 @@
           <Property Name="access_level" Type="Int32" Nullable="false" />
           <NavigationProperty Name="users" Relationship="Self.FK_users_roles" FromRole="roles" ToRole="users" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="sysdiagram">
           <Key>
             <PropertyRef Name="diagram_id" />
           </Key>
@@ -346,23 +346,23 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
-        <EntityType Name="users">
+        <EntityType Name="user">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="user_role" Type="Int32" Nullable="false" />
-          <Property Name="user_organistaion" Type="Int32" Nullable="false" />
-          <Property Name="user_district" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="districts" Relationship="Self.FK_users_districts" FromRole="users" ToRole="districts" />
-          <NavigationProperty Name="organisations" Relationship="Self.FK_users_organisations" FromRole="users" ToRole="organisations" />
-          <NavigationProperty Name="roles" Relationship="Self.FK_users_roles" FromRole="users" ToRole="roles" />
+          <Property Name="user_role" Type="Int32" />
+          <Property Name="user_organistaion" Type="Int32" />
+          <Property Name="user_district" Type="Int32" />
+          <NavigationProperty Name="district" Relationship="Self.FK_users_districts" FromRole="users" ToRole="districts" />
+          <NavigationProperty Name="organisation" Relationship="Self.FK_users_organisations" FromRole="users" ToRole="organisations" />
+          <NavigationProperty Name="role" Relationship="Self.FK_users_roles" FromRole="users" ToRole="roles" />
         </EntityType>
         <Association Name="FK_cards_animals">
-          <End Role="animals" Type="Self.animals" Multiplicity="1" />
-          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <End Role="animals" Type="Self.animal" Multiplicity="1" />
+          <End Role="cards" Type="Self.card" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="animals">
               <PropertyRef Name="passport_number" />
@@ -373,8 +373,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_publications_animals">
-          <End Role="animals" Type="Self.animals" Multiplicity="1" />
-          <End Role="publications" Type="Self.publications" Multiplicity="*" />
+          <End Role="animals" Type="Self.animal" Multiplicity="1" />
+          <End Role="publications" Type="Self.publication" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="animals">
               <PropertyRef Name="passport_number" />
@@ -385,8 +385,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_cards_districts">
-          <End Role="districts" Type="Self.districts" Multiplicity="1" />
-          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <End Role="districts" Type="Self.district" Multiplicity="1" />
+          <End Role="cards" Type="Self.card" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="districts">
               <PropertyRef Name="id" />
@@ -397,8 +397,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_cards_organisations">
-          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
-          <End Role="cards" Type="Self.cards" Multiplicity="*" />
+          <End Role="organisations" Type="Self.organisation" Multiplicity="1" />
+          <End Role="cards" Type="Self.card" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organisations">
               <PropertyRef Name="id" />
@@ -409,8 +409,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_districts">
-          <End Role="districts" Type="Self.districts" Multiplicity="1" />
-          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <End Role="districts" Type="Self.district" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="districts">
               <PropertyRef Name="id" />
@@ -421,8 +421,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_organisations">
-          <End Role="organisations" Type="Self.organisations" Multiplicity="1" />
-          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <End Role="organisations" Type="Self.organisation" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="organisations">
               <PropertyRef Name="id" />
@@ -433,7 +433,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_photos_by_pubs_publications">
-          <End Role="publications" Type="Self.publications" Multiplicity="1" />
+          <End Role="publications" Type="Self.publication" Multiplicity="1" />
           <End Role="photos_by_pubs" Type="Self.photos_by_pubs" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="publications">
@@ -445,8 +445,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_users_roles">
-          <End Role="roles" Type="Self.roles" Multiplicity="1" />
-          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <End Role="roles" Type="Self.role" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="roles">
               <PropertyRef Name="id" />
@@ -456,16 +456,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="AnimauxEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="animals" EntityType="Self.animals" />
-          <EntitySet Name="cards" EntityType="Self.cards" />
-          <EntitySet Name="districts" EntityType="Self.districts" />
-          <EntitySet Name="organisations" EntityType="Self.organisations" />
+        <EntityContainer Name="MAMKATVAYAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="animals" EntityType="Self.animal" />
+          <EntitySet Name="cards" EntityType="Self.card" />
+          <EntitySet Name="districts" EntityType="Self.district" />
+          <EntitySet Name="organisations" EntityType="Self.organisation" />
           <EntitySet Name="photos_by_pubs" EntityType="Self.photos_by_pubs" />
-          <EntitySet Name="publications" EntityType="Self.publications" />
-          <EntitySet Name="roles" EntityType="Self.roles" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
-          <EntitySet Name="users" EntityType="Self.users" />
+          <EntitySet Name="publications" EntityType="Self.publication" />
+          <EntitySet Name="roles" EntityType="Self.role" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="users" EntityType="Self.user" />
           <AssociationSet Name="FK_cards_animals" Association="Self.FK_cards_animals">
             <End Role="animals" EntitySet="animals" />
             <End Role="cards" EntitySet="cards" />
@@ -534,9 +534,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище AnimauxModelContainer" CdmEntityContainer="AnimauxEntities">
+        <EntityContainerMapping StorageEntityContainer="MAMKATVAYAModelStoreContainer" CdmEntityContainer="MAMKATVAYAEntities">
           <EntitySetMapping Name="animals">
-            <EntityTypeMapping TypeName="AnimauxModel.animals">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.animal">
               <MappingFragment StoreEntitySet="animals">
                 <ScalarProperty Name="passport_number" ColumnName="passport_number" />
                 <ScalarProperty Name="category" ColumnName="category" />
@@ -548,18 +548,18 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="cards">
-            <EntityTypeMapping TypeName="AnimauxModel.cards">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.card">
               <MappingFragment StoreEntitySet="cards">
                 <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date_added" ColumnName="date_added" />
                 <ScalarProperty Name="organisation_id" ColumnName="organisation_id" />
                 <ScalarProperty Name="district_id" ColumnName="district_id" />
                 <ScalarProperty Name="animal_id" ColumnName="animal_id" />
-                <ScalarProperty Name="date_added" ColumnName="date_added" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="districts">
-            <EntityTypeMapping TypeName="AnimauxModel.districts">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.district">
               <MappingFragment StoreEntitySet="districts">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -567,7 +567,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="organisations">
-            <EntityTypeMapping TypeName="AnimauxModel.organisations">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.organisation">
               <MappingFragment StoreEntitySet="organisations">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -575,7 +575,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="photos_by_pubs">
-            <EntityTypeMapping TypeName="AnimauxModel.photos_by_pubs">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.photos_by_pubs">
               <MappingFragment StoreEntitySet="photos_by_pubs">
                 <ScalarProperty Name="photo_url" ColumnName="photo_url" />
                 <ScalarProperty Name="pub_id" ColumnName="pub_id" />
@@ -583,11 +583,11 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="publications">
-            <EntityTypeMapping TypeName="AnimauxModel.publications">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.publication">
               <MappingFragment StoreEntitySet="publications">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="added_date" ColumnName="added_date" />
-                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="main_photo" ColumnName="main_photo" />
                 <ScalarProperty Name="city" ColumnName="city" />
                 <ScalarProperty Name="animal_id" ColumnName="animal_id" />
                 <ScalarProperty Name="type" ColumnName="type" />
@@ -595,7 +595,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="roles">
-            <EntityTypeMapping TypeName="AnimauxModel.roles">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.role">
               <MappingFragment StoreEntitySet="roles">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -604,7 +604,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="AnimauxModel.sysdiagrams">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.sysdiagram">
               <MappingFragment StoreEntitySet="sysdiagrams">
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="principal_id" ColumnName="principal_id" />
@@ -615,7 +615,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="users">
-            <EntityTypeMapping TypeName="AnimauxModel.users">
+            <EntityTypeMapping TypeName="MAMKATVAYAModel.user">
               <MappingFragment StoreEntitySet="users">
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -626,13 +626,13 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище AnimauxModel.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище AnimauxModel.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище AnimauxModel.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="Хранилище AnimauxModel.sp_helpdiagramdefinition" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="Хранилище AnimauxModel.sp_helpdiagrams" />
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище AnimauxModel.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище AnimauxModel.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="MAMKATVAYAModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="MAMKATVAYAModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="MAMKATVAYAModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="MAMKATVAYAModel.Store.sp_helpdiagramdefinition" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="MAMKATVAYAModel.Store.sp_helpdiagrams" />
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="MAMKATVAYAModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="MAMKATVAYAModel.Store.sp_upgraddiagrams" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -647,10 +647,10 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
-        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
