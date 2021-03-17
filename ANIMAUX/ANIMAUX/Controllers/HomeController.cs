@@ -252,7 +252,8 @@ namespace ANIMAUX.Controllers
                 main_photo = photoUrl,
                 city = city,
                 type = type,
-                animal_id = animalId
+                animal_id = animalId,
+                id = entities.animals.Count() + 1,
             };
 
             entities.publications.Add(pub);
