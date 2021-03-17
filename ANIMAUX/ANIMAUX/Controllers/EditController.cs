@@ -14,7 +14,7 @@ namespace ANIMAUX.Controllers
 {
     public class EditController : Controller
     {
-        AnimauxEntities entities = new AnimauxEntities();
+        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
         public ActionResult Publication(int id)
         {
             var pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
@@ -27,7 +27,7 @@ namespace ANIMAUX.Controllers
             ViewBag.added = year + "-" + month + "-" + day;
 
             ViewBag.id = pub.id;
-            ViewBag.url = pub.photo;
+            ViewBag.url = pub.main_photo;
             ViewBag.city = pub.city;
             ViewBag.type = pub.type;
 
@@ -41,7 +41,7 @@ namespace ANIMAUX.Controllers
         {
             var pubId = int.Parse(form["id"]);
             var pub = entities.publications.Where(x => x.id == pubId).FirstOrDefault();
-            pub.photo = form["newUrlPhoto"];
+            pub.main_photo = form["newUrlPhoto"];
             pub.city = form["newUrlCity"];
             pub.type = form["type"] == "lost" ? "l" : "f";
             var animalId = form["newAnimal"];
@@ -63,19 +63,19 @@ namespace ANIMAUX.Controllers
             ViewBag.added = year + "-" + month + "-" + day;
 
             ViewBag.id = pub.id;
-            ViewBag.name = pub.animals.name;
-            ViewBag.sex = pub.animals.sex;
+            ViewBag.name = pub.animal.name;
+            ViewBag.sex = pub.animal.sex;
             ViewBag.districts = entities.districts;
 
-            month = pub.animals.birth_date.Month < 10 ? "0" + pub.animals.birth_date.Month.ToString() : pub.animals.birth_date.Month.ToString();
-            day = pub.animals.birth_date.Day < 10 ? "0" + pub.animals.birth_date.Day.ToString() : pub.animals.birth_date.Day.ToString();
+            month = pub.animal.birth_date.Month < 10 ? "0" + pub.animal.birth_date.Month.ToString() : pub.animal.birth_date.Month.ToString();
+            day = pub.animal.birth_date.Day < 10 ? "0" + pub.animal.birth_date.Day.ToString() : pub.animal.birth_date.Day.ToString();
             year = pub.date_added.Year;
 
             ViewBag.birthDate = year + "-" + month + "-" + day;
 
             ViewBag.animal = entities.animals.Where(x => x.passport_number == pub.animal_id).FirstOrDefault().name;
 
-            ViewBag.dist = pub.districts.id;
+            ViewBag.dist = pub.district.id;
             return View();
         }
 
@@ -84,9 +84,9 @@ namespace ANIMAUX.Controllers
         {
             var pubId = int.Parse(form["id"]);
             var pub = entities.cards.Where(x => x.id == pubId).FirstOrDefault();
-            pub.animals.name = form["newName"];
-            pub.animals.sex = form["sex"];
-            pub.animals.birth_date = Convert.ToDateTime(form["newBirthDate"]);
+            pub.animal.name = form["newName"];
+            pub.animal.sex = form["sex"];
+            pub.animal.birth_date = Convert.ToDateTime(form["newBirthDate"]);
             pub.district_id = int.Parse(form["newDist"]);
 
             entities.SaveChanges();
@@ -106,8 +106,8 @@ namespace ANIMAUX.Controllers
 
             foreach (var card in entities.cards)
             {
-                resp += "id: " + card.id + ", Организация: " + card.organisations.name
-                    + ", Район: " + card.districts.name + ", Животное:" + card.animals.name +
+                resp += "id: " + card.id + ", Организация: " + card.organisation.name
+                    + ", Район: " + card.district.name + ", Животное:" + card.animal.name +
                     ", Добавлено:" + card.date_added.ToString();
             }
 
@@ -141,13 +141,13 @@ namespace ANIMAUX.Controllers
             worksheet.Cells["F1"].Value = "Тип";
 
             int i = 2;
-            foreach (publications pub in entities.publications)
+            foreach (publication pub in entities.publications)
             {
                 worksheet.Cells["A" + i].Value = pub.id;
                 worksheet.Cells["B" + i].Value = pub.added_date.ToString();
-                worksheet.Cells["C" + i].Value = pub.photo;
+                worksheet.Cells["C" + i].Value = pub.main_photo;
                 worksheet.Cells["D" + i].Value = pub.city;
-                worksheet.Cells["E" + i].Value = pub.animals.name;
+                worksheet.Cells["E" + i].Value = pub.animal.name;
                 worksheet.Cells["F" + i].Value = pub.type == "l" ? "Потеряно" : "Найдено";
                 i++;
             }

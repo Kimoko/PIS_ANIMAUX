@@ -32,7 +32,7 @@
 
     <div class="form-group row">
         <select name="newAnimal">
-            @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animals>)
+            @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
             {
                 <option value="@Html.DisplayFor(modelItem => item.name)"
                         @(ViewBag.animal == item.name ? "selected" : "")>

@@ -12,11 +12,16 @@ namespace ANIMAUX.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class photos_by_pubs
+    public partial class card
     {
-        public string photo_url { get; set; }
-        public int pub_id { get; set; }
+        public int id { get; set; }
+        public System.DateTime date_added { get; set; }
+        public int organisation_id { get; set; }
+        public int district_id { get; set; }
+        public int animal_id { get; set; }
     
-        public virtual publication publication { get; set; }
+        public virtual animal animal { get; set; }
+        public virtual district district { get; set; }
+        public virtual organisation organisation { get; set; }
     }
 }

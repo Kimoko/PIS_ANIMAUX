@@ -8,7 +8,7 @@ namespace ANIMAUX.Controllers
 {
     public class Registry
     {
-        AnimauxEntities entities = new AnimauxEntities();
+        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
 
         static IEnumerable<RegistryItems> List;
 
@@ -18,9 +18,9 @@ namespace ANIMAUX.Controllers
         }
         public IEnumerable<RegistryItems> GetLists()
         {      
-            List<cards> cardsList = entities.cards.ToList();
-            List<animals> animalsList = entities.animals.ToList();
-            List<districts> districtsList = entities.districts.ToList();
+            List<card> cardsList = entities.cards.ToList();
+            List<animal> animalsList = entities.animals.ToList();
+            List<district> districtsList = entities.districts.ToList();
 
             var registryItems = from c in cardsList
                                 join a in animalsList on c.animal_id equals a.passport_number

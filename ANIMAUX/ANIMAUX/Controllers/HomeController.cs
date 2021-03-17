@@ -10,7 +10,7 @@ namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
     {
-        AnimauxEntities entities = new AnimauxEntities();
+        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
         
         public ActionResult Profile()
         {
@@ -105,11 +105,15 @@ namespace ANIMAUX.Controllers
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
-            items.Add(new SelectListItem { Text = list[0], Value = list[0], Selected = true });
-            for (int i = 1; i < list.Count; i++)
+            try
             {
-                items.Add(new SelectListItem { Text = list[i], Value = list[i].ToString() });
+                items.Add(new SelectListItem { Text = list[0], Value = list[0], Selected = true });
+                for (int i = 1; i < list.Count; i++)
+                {
+                    items.Add(new SelectListItem { Text = list[i], Value = list[i].ToString() });
+                }
             }
+            catch { }
 
             return items;
         }
@@ -176,7 +180,7 @@ namespace ANIMAUX.Controllers
             var card_id = Convert.ToInt32(form["cardId"]);
             if (card_id != -1)
             {
-                cards card = new cards { id = card_id };
+                card card = new card { id = card_id };
 
                 entities.cards.Attach(card);
                 entities.cards.Remove(card);
@@ -197,7 +201,7 @@ namespace ANIMAUX.Controllers
             var organisation_id = Convert.ToInt32(form["dropDownOrganisations"]);
             var date_added = Convert.ToDateTime(form["date_added"]);
 
-            cards card = new cards
+            card card = new card
             {
                 organisation_id = organisation_id,
                 district_id = district_id,
@@ -222,7 +226,7 @@ namespace ANIMAUX.Controllers
 
         public ActionResult RemovePublication(int id)
         {
-            publications pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
+            publication pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
             entities.publications.Remove(pub);
             try
             {
@@ -242,10 +246,10 @@ namespace ANIMAUX.Controllers
             var animal = form["addAnimal"];
             var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
 
-            publications pub = new publications
+            publication pub = new publication
             {
                 added_date = DateTime.Now,
-                photo = photoUrl,
+                main_photo = photoUrl,
                 city = city,
                 type = type,
                 animal_id = animalId
