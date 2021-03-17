@@ -237,7 +237,7 @@ namespace ANIMAUX.Controllers
             {}
             return Redirect(Url.Action("Publications", "Home"));
         }
-
+       
         public ActionResult AddPublication(FormCollection form)
         {
             string photoUrl = form["addUrl"];
@@ -254,7 +254,7 @@ namespace ANIMAUX.Controllers
                 city = city,
                 type = type,
                 animal_id = animalId,
-                id = entities.animals.Count() + 1,
+                id = entities.animals.Count() + 3,
             };
 
             entities.publications.Add(pub);

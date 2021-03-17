@@ -1,6 +1,26 @@
 ﻿@{
     ViewBag.Title = "Oбъявления";
 }
+
+@using (Html.BeginForm("AddPublication", "Home", FormMethod.Post))
+{
+    <div id="add">
+        <h2> Добавить публикацию</h2>
+        <input type="text" placeholder="URL пикчи" name="addUrl">
+        <input type="text" placeholder="Город" name="addCity">
+        <select name="addAnimal">
+            @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
+            {
+                <option value="@Html.DisplayFor(modelItem => item.name)">
+                    @Html.DisplayFor(modelItem => item.name)
+                </option>
+            }
+        </select><br>
+        <input type="radio" id="cock" name="type" value="lost">Потеряно <br>
+        <input type="radio" id="cock" name="type" value="found" checked)> Найдено <br>
+        <input type="submit" value="Добавить">
+    </div>
+}
 <table>
     <tr>
         <td>id</td>
@@ -20,49 +40,30 @@
 
     @foreach (var item in ViewBag.Pubs as IEnumerable<ANIMAUX.Models.publication>)
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.id)</td>
-            <td>@Html.DisplayFor(modelItem => item.added_date)</td>
-            <td>
-                <img style="max-height:300px" src="@Html.DisplayFor(modelItem => item.main_photo)" />
-            </td>
-            <td>
-                @foreach (var anim in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
-                {
-                    if (item.animal_id == anim.passport_number)
-                    {
-                        @Html.DisplayFor(modelItem => anim.name);
-                        break;
-                    }
-                }
-            </td>
-            <td>
-                @Html.ActionLink("Изменить", "Publication", "Edit", new { id = item.id }, null)
-                @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null)
-            </td>
-            <td>@Html.DisplayFor(modelItem => item.city)</td>
-            <td>@(@Html.DisplayFor(modelItem => item.type).ToString() == "l" ? "Потеряно" : "Найден")
-        </tr>
+<tr>
+    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.id)</td>
+    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.added_date)</td>
+    <td style="border:solid 1px">
+        <img style="max-width:100px" src="@Html.DisplayFor(modelItem => item.main_photo)" />
+    </td>
+    <td style="border:solid 1px">
+        @foreach (var anim in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
+        {
+            if (item.animal_id == anim.passport_number)
+            {
+                @Html.DisplayFor(modelItem => anim.name);
+                break;
+            }
+        }
+    </td>
+    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.city)</td>
+    <td style="border:solid 1px">@(@Html.DisplayFor(modelItem => item.type).ToString() == "l" ? "Потеряно" : "Найден")
+    <td style="border:solid 1px">
+        @Html.ActionLink("Изменить", "Publication", "Edit", new { id = item.id }, null)<br />
+        @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null)
+    </td>
+</tr>
     }
 
 </table>
 
-@using (Html.BeginForm("AddPublication", "Home", FormMethod.Post))
-{
-<div id="add">
-    <h2> Добавить публикацию</h2>
-    <input type="text" placeholder="URL пикчи" name="addUrl">
-    <input type="text" placeholder="Город" name="addCity">
-    <select name="addAnimal">
-        @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
-        {
-            <option value="@Html.DisplayFor(modelItem => item.name)">
-                @Html.DisplayFor(modelItem => item.name)
-            </option>
-        }
-    </select><br>
-    <input type="radio" id="cock" name="type" value="lost" >Потеряно <br>
-    <input type="radio" id="cock" name="type" value="found" checked)> Найдено <br>
-    <input type="submit" value="Добавить">
-</div>
-}
