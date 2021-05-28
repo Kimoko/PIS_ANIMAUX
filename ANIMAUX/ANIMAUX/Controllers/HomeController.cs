@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Text.RegularExpressions;
 using ANIMAUX.Models;
 using ANIMAUX.Helpers;
 using ANIMAUX.Controllers;
@@ -240,13 +241,21 @@ namespace ANIMAUX.Controllers
        
         public ActionResult AddPublication(FormCollection form)
         {
-            string photoUrl = form["addUrl"];
+            Regex regex = new Regex(@"(https ?:\/\/| ftps ?:\/\/| www\.)((? ![.,? !;:()]*(\s |$))[^\s]){ 2,}");
+            string photoUrl;
+                if (String.IsNullOrWhiteSpace(form["addUrl"]))
+                    {
+                        photoUrl = form["photo"];
+                    }
+                else
+                    {
+                        if ( ) ;
+                    }
             string city = form["addCity"];
             var type = form["type"] == "lost" ? "l" : "f";
 
             var animal = form["addAnimal"];
             var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
-
             publication pub = new publication
             {
                 added_date = DateTime.Now,

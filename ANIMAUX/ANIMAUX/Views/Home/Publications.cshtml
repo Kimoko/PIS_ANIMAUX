@@ -4,10 +4,14 @@
 
 @using (Html.BeginForm("AddPublication", "Home", FormMethod.Post))
 {
+
     <div id="add">
         <h2> Добавить публикацию</h2>
-        <input type="text" placeholder="URL пикчи" name="addUrl">
-        <input type="text" placeholder="Город" name="addCity">
+        <input type="text" placeholder="URL Фото" name="addUrl"> или 
+        <form enctype="multipart/form-data" method="post">
+             <input type="file" name="photo" multiple accept="image/*,image/jpeg">
+        </form><br />
+        <input type="text" placeholder="Город" name="addCity"><br />
         <select name="addAnimal">
             @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
             {
@@ -25,7 +29,7 @@
     <tr>
         <td>id</td>
         <td>Добавлено</td>
-        <td>Фотко</td>
+        <td>Фото</td>
         <td>Животное</td>
         <td>Город</td>
         <td>Тип</td>
