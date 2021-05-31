@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Oбъявление";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("AddPublication", "Home", FormMethod.Post))
+        {
+
+            <div id="add">
+                <h2> Добавить публикацию</h2>
+                <input type="text" placeholder="URL Фото" name="addUrl"> или
+                <form enctype="multipart/form-data" method="post">
+                    <input type="file" name="photo" multiple accept="image/*,image/jpeg">
+                </form><br />
+                <input type="text" placeholder="Город" name="addCity"><br />
+                <select name="addAnimal">
+                    @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
+                    {
+                        <option value="@Html.DisplayFor(modelItem => item.name)">
+                            @Html.DisplayFor(modelItem => item.name)
+                        </option>
+                    }
+                </select><br>
+                <input type="radio" id="cock" name="type" value="lost">Потеряно <br>
+                <input type="radio" id="cock" name="type" value="found" checked)> Найдено <br>
+                <input type="submit" value="Добавить">
+            </div>
+        }
+    </div>
+</body>
+</html>

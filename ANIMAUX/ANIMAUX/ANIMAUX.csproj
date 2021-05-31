@@ -448,6 +448,7 @@
     <Content Include="Views\Home\Card.cshtml" />
     <Content Include="Views\Edit\Publication.cshtml" />
     <Content Include="Views\Edit\Card.cshtml" />
+    <Content Include="Views\Home\Publication.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

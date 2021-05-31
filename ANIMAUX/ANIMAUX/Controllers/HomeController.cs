@@ -238,19 +238,25 @@ namespace ANIMAUX.Controllers
             {}
             return Redirect(Url.Action("Publications", "Home"));
         }
+        public ActionResult Publication()
+        {
+            ViewBag.Animals = entities.animals;
+            CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1);
+            return View();
+        }
        
         public ActionResult AddPublication(FormCollection form)
         {
-            Regex regex = new Regex(@"(https ?:\/\/| ftps ?:\/\/| www\.)((? ![.,? !;:()]*(\s |$))[^\s]){ 2,}");
-            string photoUrl;
-                if (String.IsNullOrWhiteSpace(form["addUrl"]))
-                    {
-                        photoUrl = form["photo"];
-                    }
-                else
-                    {
-                        if ( ) ;
-                    }
+            //Regex regex = new Regex(@"(https ?:\/\/| ftps ?:\/\/| www\.)((? ![.,? !;:()]*(\s |$))[^\s]){ 2,}");
+            string photoUrl = form["addUrl"];
+               // if (String.IsNullOrWhiteSpace(form["addUrl"]))
+                //    {
+                 //       photoUrl = form["photo"];
+                //    }
+               // else
+               //     {
+               //         if ( ) ;
+               //     }
             string city = form["addCity"];
             var type = form["type"] == "lost" ? "l" : "f";
 
@@ -263,7 +269,7 @@ namespace ANIMAUX.Controllers
                 city = city,
                 type = type,
                 animal_id = animalId,
-                id = entities.animals.Count() + 3,
+                id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
             };
 
             entities.publications.Add(pub);
