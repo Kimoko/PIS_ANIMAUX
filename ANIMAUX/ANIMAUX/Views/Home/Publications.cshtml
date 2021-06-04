@@ -1,6 +1,12 @@
 ﻿@{
     ViewBag.Title = "Oбъявления";
 }
+@if (ViewBag.error != null)
+{
+    @ViewBag.error
+}
+<h1>Список объявлений</h1>
+@Html.ActionLink("Экспортировать в Excel", "ExportExcel", "Edit")
 
 
 <table>
@@ -13,38 +19,31 @@
         <td>Тип</td>
     </tr>
 
-    @if (ViewBag.error != null)
-    {
-        @ViewBag.error
-    }
-
-    @Html.ActionLink("Экспортировать в Excel", "ExportExcel", "Edit")
-
     @foreach (var item in ViewBag.Pubs as IEnumerable<ANIMAUX.Models.publication>)
     {
-<tr>
-    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.id)</td>
-    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.added_date)</td>
-    <td style="border:solid 1px">
-        <img style="max-width:100px" src="@Html.DisplayFor(modelItem => item.main_photo)" />
-    </td>
-    <td style="border:solid 1px">
-        @foreach (var anim in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
-        {
-            if (item.animal_id == anim.passport_number)
-            {
-                @Html.DisplayFor(modelItem => anim.name);
-                break;
-            }
-        }
-    </td>
-    <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.city)</td>
-    <td style="border:solid 1px">@(@Html.DisplayFor(modelItem => item.type).ToString() == "l" ? "Потеряно" : "Найден")
-    <td style="border:solid 1px">
-        @Html.ActionLink("Изменить", "Publication", "Edit", new { id = item.id }, null)<br />
-        @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null)
-    </td>
-</tr>
+        <tr>
+            <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.id)</td>
+            <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.added_date)</td>
+            <td style="border:solid 1px">
+                <img style="max-width:100px" src="@Html.DisplayFor(modelItem => item.main_photo)" />
+            </td>
+            <td style="border:solid 1px">
+                @foreach (var anim in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
+                {
+                    if (item.animal_id == anim.passport_number)
+                    {
+                        @Html.DisplayFor(modelItem => anim.name);
+                        break;
+                    }
+                }
+            </td>
+            <td style="border:solid 1px">@Html.DisplayFor(modelItem => item.city)</td>
+            <td style="border:solid 1px">@(@Html.DisplayFor(modelItem => item.type).ToString() == "l" ? "Потеряно" : "Найден")
+            <td style="border:solid 1px">
+                @Html.ActionLink("Изменить", "Publication", "Edit", new { id = item.id }, null)<br />
+                @Html.ActionLink("Удалить", "RemovePublication", "Home", new { id = item.id }, null)
+            </td>
+        </tr>
     }
 
 </table>

@@ -2,20 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
+using System.Web.UI.WebControls;
 using System.Web.Mvc;
 using System.Text.RegularExpressions;
+using System.IO;
 using ANIMAUX.Models;
 using ANIMAUX.Helpers;
 using ANIMAUX.Controllers;
+using System.Web.UI;
+
+
 namespace ANIMAUX.Controllers
 {
     public class HomeController : Controller
     {
+       
         MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
         
         public ActionResult Profile()
         {
             return View();
+        }
+        public class Person
+        {
+            public byte[] Avatar { get; set; }
         }
 
         //////////////////////////РЕЕСТР///////////////////////////
@@ -226,6 +237,19 @@ namespace ANIMAUX.Controllers
             return View();
         }
 
+        //public ActionResult Error()
+        //{
+        //    return View();
+        //}
+
+       // [HttpPost]
+       // public ActionResult Error()
+       // {
+       //     ViewBag.Message = string.Format("Перепроверьте данные в форме");
+       //     return View();
+       // }
+
+
         public ActionResult RemovePublication(int id)
         {
             publication pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
@@ -244,32 +268,43 @@ namespace ANIMAUX.Controllers
             CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1);
             return View();
         }
-       
         public ActionResult AddPublication(FormCollection form)
         {
-            //Regex regex = new Regex(@"(https ?:\/\/| ftps ?:\/\/| www\.)((? ![.,? !;:()]*(\s |$))[^\s]){ 2,}");
+            
+            string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+            Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
             string photoUrl = form["addUrl"];
-               // if (String.IsNullOrWhiteSpace(form["addUrl"]))
-                //    {
-                 //       photoUrl = form["photo"];
-                //    }
-               // else
-               //     {
-               //         if ( ) ;
-               //     }
+           
+            while (true)
+            {
+            if (string.IsNullOrWhiteSpace(form["addUrl"]) == true )
+                {
+                    photoUrl = form["photo"];
+                }
+                else
+                {
+                    if (Rgx.IsMatch(form["addUrl"]) == true)
+                    
+                        {
+                            photoUrl = form["addUrl"];
+                            break;
+
+                        }
+                }
+            }
+           
             string city = form["addCity"];
             var type = form["type"] == "lost" ? "l" : "f";
-
             var animal = form["addAnimal"];
             var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
             publication pub = new publication
             {
+                animal_id = animalId,
+                id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
                 added_date = DateTime.Now,
                 main_photo = photoUrl,
                 city = city,
                 type = type,
-                animal_id = animalId,
-                id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
             };
 
             entities.publications.Add(pub);
