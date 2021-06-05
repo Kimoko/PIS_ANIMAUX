@@ -31,6 +31,7 @@ namespace ANIMAUX.Controllers
             model.Foto = pub.main_photo;
             model.Sity = pub.city;
             model.Status = pub.type;
+            model.Name = pub.animal.name;
 
             ViewBag.animal = entities.animals.Where(x => x.passport_number == pub.animal_id).FirstOrDefault().name;
 
@@ -63,9 +64,9 @@ namespace ANIMAUX.Controllers
                 pub.main_photo = model.Foto; //form["newUrlPhoto"];
                 pub.city = model.Sity;
                 pub.type = model.Status == "lost" ? "l" : "f";
-                var animalId = form["newAnimal"];
+                var Name = model.Name;
 
-                pub.animal_id = entities.animals.Where(x => x.name == animalId).FirstOrDefault().passport_number;
+                pub.animal_id = entities.animals.Where(x => x.name == Name).FirstOrDefault().passport_number;
                 entities.SaveChanges();
 
                 return Redirect(Url.Action("Publications", "Home"));

@@ -28,7 +28,7 @@ namespace ANIMAUX.Models
         [Display(Name = "Город")]
         public string Sity { get; set; }
 
-        [Required]
+        
         [Display(Name = "Имя")]
         public string Name { get; set; }
 
