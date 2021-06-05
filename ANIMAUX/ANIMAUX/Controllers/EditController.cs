@@ -72,6 +72,7 @@ namespace ANIMAUX.Controllers
             }
             else
             {
+                ViewBag.animals = entities.animals;
                 ViewBag.Message = "Non valid";
                 return View(model);
             }
