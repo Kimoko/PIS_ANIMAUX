@@ -32,9 +32,9 @@ namespace ANIMAUX.Controllers
             model.Sity = pub.city;
             model.Status = pub.type;
             model.Name = pub.animal.name;
-
             ViewBag.animal = entities.animals.Where(x => x.passport_number == pub.animal_id).FirstOrDefault().name;
-
+            ModelState.Clear();
+            TryValidateModel(model);
             return View(model);
         }
 
