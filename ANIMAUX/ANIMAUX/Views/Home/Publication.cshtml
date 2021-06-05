@@ -1,8 +1,7 @@
-﻿@model IEnumerable<ANIMAUX.Models.RegistrationPublication>
-@{
-    ViewBag.Title = "Oбъявление";
-}
-
+﻿@model ANIMAUX.Models.RegistrationPublication
+    @{
+        ViewBag.Title = "Oбъявление";
+    }
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -15,29 +14,28 @@
             <h4 style="text-align:center"> Добавить объявление</h4>
         </div>
         <div>
-            @using (Html.BeginForm("AddPublication", "Home", FormMethod.Post))
+            @using (Html.BeginForm("Publication","Home"))
             {
-
                 <div id="add">
                     <div class="form-group">
-                        <div class="editor-lable">
-                            
-                        </div>
-                        <label for="Foto">Фото:</label>
+                        @Html.LabelFor(m => m.Foto)
+                        @Html.EditorFor(model => model.Foto)
+                        
 
-                        <input type="url" name="addUrl" class="form-control">
                         или
                         <form enctype="multipart/form-data" method="post">
                             <input type="file" name="photo" multiple accept="image/*,image/jpeg">
                         </form>
+                            @Html.ValidationMessageFor(m => m.Foto)
                     </div>
                     <div class="form-group">
-                        <label for="Sity">Город:</label>
-                        <input type="text" name="addCity" class="form-control">  <span asp-validation-for="addCity"></span>
+                        @Html.LabelFor(m => m.Sity)
+                        @Html.EditorFor(model => model.Sity)
+                        @Html.ValidationMessageFor(m => m.Sity)
                     </div>
                     <div class="form-group">
-                        <label for="Name">Имя:</label>
-                        <select name="addAnimal">
+                        @Html.LabelFor(m => m.Name)
+                        <select name="Name">
                             @foreach (var item in ViewBag.animals as IEnumerable<ANIMAUX.Models.animal>)
                             {
                                 <option value="@Html.DisplayFor(modelItem => item.name)">
@@ -46,14 +44,14 @@
                                 </option>
                             }
                         </select>
+                        @Html.ValidationMessageFor(m => m.Name)
                     </div>
-                    <label for="Status">Статус:</label>
-                    <div class="form-check">
-                        <input type="radio" id="cock" name="type" value="lost">Потеряно
-                    </div>
-                    <div class="form-check">
-                        <input type="radio" id="cock" name="type" value="found" checked)>Найдено
-                    </div>
+                    @Html.LabelFor(m => m.Status)
+                <div class="form-check">
+                    <input type="radio" id="cock" name="Status" value="lost">Потеряно
+                    <input type="radio" id="cock" name="Status" value="found" checked)>Найдено
+                    @Html.ValidationMessageFor(m => m.Status)
+                </div>
                     <input type="submit" value="Добавить">
 
                 </div>
@@ -62,3 +60,4 @@
     </div>
 </body>
 </html>
+

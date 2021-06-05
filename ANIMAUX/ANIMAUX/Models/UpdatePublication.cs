@@ -7,17 +7,23 @@ using System.Web.Mvc;
 
 namespace ANIMAUX.Models
 {
-    public class RegistrationPublication
+    public class UpdatePublication
     {
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
 
 
-        [Required(ErrorMessage ="Введите ссылку")]
+        [Required(ErrorMessage = "Введите ссылку")]
         [Url]
         [Display(Name = "Foto")]
         public string Foto { get; set; }
 
+        [Required(ErrorMessage = "Выберите дату")]
+        
+        [Display(Name = "DateTime")]
+        
+        public string dateTime { get; set; }
+      
         [Required(ErrorMessage = "Введите название города")]
         [Display(Name = "Sity")]
         public string Sity { get; set; }

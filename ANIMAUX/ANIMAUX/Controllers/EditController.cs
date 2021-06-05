@@ -9,13 +9,14 @@ using System.Web.Mvc;
 using ANIMAUX.Models;
 using GemBox.Document;
 using GemBox.Spreadsheet;
+using System.Text.RegularExpressions;
 
 namespace ANIMAUX.Controllers
 {
     public class EditController : Controller
     {
         MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
-        public ActionResult Publication(int id)
+        public ActionResult Publication(UpdatePublication model,int id)
         {
             var pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
             ViewBag.animals = entities.animals;
@@ -24,32 +25,56 @@ namespace ANIMAUX.Controllers
             var day = pub.added_date.Day < 10 ? "0" + pub.added_date.Day.ToString() : pub.added_date.Day.ToString();
             var year = pub.added_date.Year;
 
-            ViewBag.added = year + "-" + month + "-" + day;
+            model.dateTime = year + "-" + month + "-" + day;
 
             ViewBag.id = pub.id;
-            ViewBag.url = pub.main_photo;
-            ViewBag.city = pub.city;
-            ViewBag.type = pub.type;
+            model.Foto = pub.main_photo;
+            model.Sity = pub.city;
+            model.Status = pub.type;
 
             ViewBag.animal = entities.animals.Where(x => x.passport_number == pub.animal_id).FirstOrDefault().name;
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Publication(FormCollection form)
+        public ActionResult Publication(UpdatePublication model, FormCollection form)
         {
-            var pubId = int.Parse(form["id"]);
-            var pub = entities.publications.Where(x => x.id == pubId).FirstOrDefault();
-            pub.main_photo = form["newUrlPhoto"];
-            pub.city = form["newUrlCity"];
-            pub.type = form["type"] == "lost" ? "l" : "f";
-            var animalId = form["newAnimal"];
+            string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+            Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            if ((string.IsNullOrEmpty(model.Foto) == true) || (Regex.IsMatch(model.Foto, Pattern) == false))
+            {
+                ModelState.AddModelError(nameof(model.Foto), "Введите url");
+            }
 
-            pub.animal_id = entities.animals.Where(x => x.name == animalId).FirstOrDefault().passport_number;
-            entities.SaveChanges();
+            if (string.IsNullOrEmpty(model.Sity))
+            {
+                ModelState.AddModelError(nameof(model.Sity), "Введите Город");
+            }
 
-            return Redirect(Url.Action("Publications", "Home"));
+            if (string.IsNullOrEmpty(model.Status))
+            {
+                ModelState.AddModelError(nameof(model.Status), "Выберите статус животного");
+            }
+            if (ModelState.IsValid)
+            {
+                var pubId = int.Parse(form["id"]);
+                var pub = entities.publications.Where(x => x.id == pubId).FirstOrDefault();
+                pub.main_photo = model.Foto; //form["newUrlPhoto"];
+                pub.city = model.Sity;
+                pub.type = model.Status == "lost" ? "l" : "f";
+                var animalId = model.Name;
+
+                pub.animal_id = entities.animals.Where(x => x.name == animalId).FirstOrDefault().passport_number;
+                entities.SaveChanges();
+
+                return Redirect(Url.Action("Publications", "Home"));
+            }
+            else
+            {
+                ViewBag.Message = "Non valid";
+                return View(model);
+            }
         }
 
         public ActionResult Card(int id)

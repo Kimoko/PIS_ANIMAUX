@@ -139,9 +139,10 @@ namespace ANIMAUX.Controllers
             ViewBag.DropDownDistrict = CreateSelectList(entities.districts.Select(z => z.name).Distinct().ToList());
         }
 
-       
+
 
         ////////////////////////////КАРТА ЖИВОТНОГО////////////////////////////////
+        
         public ActionResult Card(string cardId)
         {
             if (cardId != null)
@@ -229,26 +230,14 @@ namespace ANIMAUX.Controllers
 
 
         ////////////////////////////ОБЪЯВЛЕНИЯ////////////////////////////////
-        public ActionResult Publications()
+       
+    public ActionResult Publications()
         {
             ViewBag.Pubs = entities.publications;
             ViewBag.Animals = entities.animals;
             CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1);
             return View();
         }
-
-        //public ActionResult Error()
-        //{
-        //    return View();
-        //}
-
-       // [HttpPost]
-       // public ActionResult Error()
-       // {
-       //     ViewBag.Message = string.Format("Перепроверьте данные в форме");
-       //     return View();
-       // }
-
 
         public ActionResult RemovePublication(int id)
         {
@@ -262,56 +251,145 @@ namespace ANIMAUX.Controllers
             {}
             return Redirect(Url.Action("Publications", "Home"));
         }
-        public ActionResult Publication()
+        public ActionResult Publication(RegistrationPublication model)
+        
         {
             ViewBag.Animals = entities.animals;
             CurrentUser.setUser("Куратор ВетСлужбы", 1, 1, 1);
-            return View();
-        }
-        public ActionResult AddPublication(FormCollection form)
-        {
-            
             string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
             Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            string photoUrl = form["addUrl"];
-           
-            while (true)
+            if ((string.IsNullOrEmpty(model.Foto) == true) || (Regex.IsMatch(model.Foto, Pattern) == false))
             {
-            if (string.IsNullOrWhiteSpace(form["addUrl"]) == true )
-                {
-                    photoUrl = form["photo"];
-                }
-                else
-                {
-                    if (Rgx.IsMatch(form["addUrl"]) == true)
-                    
-                        {
-                            photoUrl = form["addUrl"];
-                            break;
-
-                        }
-                }
+                ModelState.AddModelError(nameof(model.Foto), "Введите url");
             }
-           
-            string city = form["addCity"];
-            var type = form["type"] == "lost" ? "l" : "f";
-            var animal = form["addAnimal"];
-            var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
-            publication pub = new publication
+
+            if (string.IsNullOrEmpty(model.Sity))
             {
-                animal_id = animalId,
-                id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
-                added_date = DateTime.Now,
-                main_photo = photoUrl,
-                city = city,
-                type = type,
-            };
+                ModelState.AddModelError(nameof(model.Sity), "Введите Город");
+            }
 
-            entities.publications.Add(pub);
-            entities.SaveChanges();
+            if (string.IsNullOrEmpty(model.Status))
+            {
+                ModelState.AddModelError(nameof(model.Status), "Выберите статус животного");
+            }
 
-            return Redirect(Url.Action("Publications", "Home"));
+            if (ModelState.IsValid)
+            {
+                string photoUrl = model.Foto;
+                string city = model.Sity; //form["addCity"];
+                var type = model.Status == "lost" ? "l" : "f";  //form["type"] == "lost" ? "l" : "f";
+                var animal = model.Name; //form["addAnimal"];
+                var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
+                publication pub = new publication
+                {
+                    animal_id = animalId,
+                    id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
+                    added_date = DateTime.Now,
+                    main_photo = photoUrl,
+                    city = city,
+                    type = type,
+                };
+
+                entities.publications.Add(pub);
+                entities.SaveChanges();
+
+                return Redirect(Url.Action("Publications", "Home"));
+            }
+            else
+            {
+                ViewBag.Message = "Non valid";
+                return View(model);
+            }
+            //return View();
         }
+        
+        //public ActionResult AddPublication(RegistrationPublication model)
+        //{
+            //string Pattern = @"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+            //Regex Rgx = new Regex(Pattern, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            //if ((string.IsNullOrEmpty(model.Foto) == true) || (Regex.IsMatch(model.Foto, Pattern) == false))
+            //{
+            //    ModelState.AddModelError(nameof(model.Foto), "Введите url");
+            //}
+
+            //if (string.IsNullOrEmpty(model.Sity))
+            //{
+            //    ModelState.AddModelError(nameof(model.Sity), "Введите Город");
+            //}
+
+            //if (string.IsNullOrEmpty(model.Status))
+            //{
+            //    ModelState.AddModelError(nameof(model.Status), "Выберите статус животного");
+            //}
+
+            //if (ModelState.IsValid)
+            //{
+            //    string photoUrl = model.Foto; 
+            //    string city = model.Sity; //form["addCity"];
+            //    var type = model.Status == "lost" ? "l" : "f";  //form["type"] == "lost" ? "l" : "f";
+            //    var animal = model.Name; //form["addAnimal"];
+            //    var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
+            //    publication pub = new publication
+            //    {
+            //        animal_id = animalId,
+            //        id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
+            //        added_date = DateTime.Now,
+            //        main_photo = photoUrl,
+            //        city = city,
+            //        type = type,
+            //    };
+
+            //    entities.publications.Add(pub);
+            //    entities.SaveChanges();
+
+            //    return Redirect(Url.Action("Publications", "Home"));
+            //}
+            //else
+            //{
+            //    ViewBag.Message = "Non valid";
+            //    return View(model);
+            //}
+            
+
+            //string photoUrl = form["addUrl"];
+
+            //while (true)
+            //{
+            //if (string.IsNullOrWhiteSpace(form["addUrl"]) == true )
+            //    {
+            //        photoUrl = form["photo"];
+            //    }
+            //    else
+            //    {
+            //        if (Rgx.IsMatch(form["addUrl"]) == true)
+
+            //            {
+            //                photoUrl = form["addUrl"];
+            //                break;
+
+            //            }
+            //    }
+            //}
+
+            //string city = form["addCity"];
+            //var type = form["type"] == "lost" ? "l" : "f";
+            //var animal = form["addAnimal"];
+            //var animalId = entities.animals.Where(x => x.name == animal).FirstOrDefault().passport_number;
+            //publication pub = new publication
+            //{
+            //    animal_id = animalId,
+            //    id = entities.publications.OrderByDescending(a => a.id).Select(p => p).FirstOrDefault().id + 1,
+            //    added_date = DateTime.Now,
+            //    main_photo = photoUrl,
+            //    city = city,
+            //    type = type,
+            //};
+
+            //entities.publications.Add(pub);
+            //entities.SaveChanges();
+
+            //return Redirect(Url.Action("Publications", "Home"));
+        //}
     }
 
 }
