@@ -63,7 +63,7 @@ namespace ANIMAUX.Controllers
                 pub.main_photo = model.Foto; //form["newUrlPhoto"];
                 pub.city = model.Sity;
                 pub.type = model.Status == "lost" ? "l" : "f";
-                var animalId = model.Name;
+                var animalId = form["newAnimal"];
 
                 pub.animal_id = entities.animals.Where(x => x.name == animalId).FirstOrDefault().passport_number;
                 entities.SaveChanges();
