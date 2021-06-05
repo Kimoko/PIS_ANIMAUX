@@ -18,6 +18,7 @@ namespace ANIMAUX.Controllers
         MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
         public ActionResult Publication(UpdatePublication model,int id)
         {
+
             var pub = entities.publications.Where(x => x.id == id).FirstOrDefault();
             ViewBag.animals = entities.animals;
 
@@ -27,7 +28,7 @@ namespace ANIMAUX.Controllers
 
             model.dateTime = year + "-" + month + "-" + day;
 
-            ViewBag.id = pub.id;
+            model.Id = pub.id;
             model.Foto = pub.main_photo;
             model.Sity = pub.city;
             model.Status = pub.type;
@@ -59,7 +60,7 @@ namespace ANIMAUX.Controllers
             }
             if (ModelState.IsValid)
             {
-                var pubId = int.Parse(form["id"]);
+                var pubId = model.Id;
                 var pub = entities.publications.Where(x => x.id == pubId).FirstOrDefault();
                 pub.main_photo = model.Foto; //form["newUrlPhoto"];
                 pub.city = model.Sity;

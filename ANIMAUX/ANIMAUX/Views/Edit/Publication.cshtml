@@ -7,12 +7,13 @@
         <div class="card-header">
             <h3>Изменить объявление</h3>
         </div>
-            <div>
+        <div>
             @using (Html.BeginForm("Publication", "Edit", FormMethod.Post, new { @class = "mt-3" }))
             {
-                
-                        <input readonly type="hidden" name="id" id="id" value="@ViewBag.id" >
-                
+
+                //<input readonly type="hidden" name="id" id="id" value="@ViewBag.id">
+                @Html.EditorFor(m => m.Id)
+
 
                 <div class="form-group row">
                     @Html.LabelFor(m => m.dateTime):
@@ -48,8 +49,8 @@
                 </div>
                 <div>
                     @Html.LabelFor(m => m.Status):
-                    <input type="radio" id="cock" name="Status" value="lost" @(Model.Status == "l" ? "checked" : "")>Потеряно 
-                    <input type="radio" id="cock" name="Status" value="found" @(Model.Status == "f" ? "checked" : "")>Найдено 
+                    <input type="radio" id="cock" name="Status" value="lost" @(Model.Status == "l" ? "checked" : "")>Потеряно
+                    <input type="radio" id="cock" name="Status" value="found" @(Model.Status == "f" ? "checked" : "")>Найдено
                     @Html.ValidationMessageFor(m => m.Status)
                 </div>
 
@@ -58,6 +59,6 @@
                     @Html.ActionLink("Отмена", "Publications", "Home")
                 </div>
             }
-            </div>
+        </div>
         </div>
 </body>
