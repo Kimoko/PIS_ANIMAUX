@@ -8,7 +8,7 @@ namespace ANIMAUX.Controllers
 {
     public class Registry
     {
-        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
+        BDEntities entities = new BDEntities();
 
         static IEnumerable<RegistryItems> List;
 

@@ -15,7 +15,7 @@ namespace ANIMAUX.Controllers
 {
     public class EditController : Controller
     {
-        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
+        BDEntities entities = new BDEntities();
         public ActionResult Publication(UpdatePublication model,int id)
         {
 

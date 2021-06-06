@@ -15,9 +15,9 @@ namespace ANIMAUX.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class MAMKATVAYAEntities : DbContext
+    public partial class BDEntities : DbContext
     {
-        public MAMKATVAYAEntities()
+        public BDEntities()
             : base("name=MAMKATVAYAEntities")
         {
         }

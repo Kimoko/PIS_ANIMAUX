@@ -18,7 +18,7 @@ namespace ANIMAUX.Controllers
     public class HomeController : Controller
     {
        
-        MAMKATVAYAEntities entities = new MAMKATVAYAEntities();
+        BDEntities entities = new BDEntities();
         
         public ActionResult Profile()
         {
